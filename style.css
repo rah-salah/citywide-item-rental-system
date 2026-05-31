@@ -1,0 +1,214 @@
+/* Citywide Jigjiga — Bootstrap 5 + minimal custom CSS */
+
+:root {
+  --cw-primary: #0d3b66;
+  --cw-primary-dark: #082a4a;
+  --cw-accent: #f4a261;
+  --cw-success: #2a9d8f;
+  --cw-bg: #f7f8fa;
+  --cw-text: #1c2230;
+  --cw-muted: #5b6478;
+  --cw-border: #e5e7eb;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--cw-bg);
+  color: var(--cw-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 { font-weight: 700; letter-spacing: -0.01em; }
+
+/* ===== Brand utilities ===== */
+.text-brand { color: var(--cw-primary) !important; }
+.bg-brand { background-color: var(--cw-primary) !important; }
+.bg-brand-soft { background-color: #eaf1fb !important; }
+.btn-brand {
+  background-color: var(--cw-primary);
+  border-color: var(--cw-primary);
+  color: #fff;
+}
+.btn-brand:hover,
+.btn-brand:focus {
+  background-color: var(--cw-primary-dark);
+  border-color: var(--cw-primary-dark);
+  color: #fff;
+}
+.btn-outline-brand {
+  border-color: var(--cw-primary);
+  color: var(--cw-primary);
+}
+.btn-outline-brand:hover { background-color: var(--cw-primary); color: #fff; }
+
+/* ===== Navbar ===== */
+.cw-navbar {
+  background-color: #fff;
+  border-bottom: 1px solid var(--cw-border);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.cw-navbar .navbar-brand { font-weight: 800; color: var(--cw-primary); padding: 0.1rem 0; }
+.cw-navbar .nav-link {
+  color: var(--cw-text);
+  font-weight: 500;
+  padding: 0.5rem 0.9rem !important;
+  border-radius: 0.5rem;
+}
+.cw-navbar .nav-link:hover { background: #f1f3f7; color: var(--cw-primary); }
+.cw-navbar .nav-link.active { color: var(--cw-primary); background: #eaf1fb; }
+
+/* ===== Hero ===== */
+.cw-hero {
+  background: linear-gradient(135deg, #0d3b66 0%, #1a5fa0 100%);
+  color: #fff;
+  padding: 5rem 0;
+}
+.cw-hero .eyebrow {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ===== Cards ===== */
+.cw-card {
+  background: #fff;
+  border: 1px solid var(--cw-border);
+  border-radius: 0.75rem;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+.cw-card:hover { box-shadow: 0 8px 24px rgba(13,59,102,0.08); transform: translateY(-2px); }
+
+.cw-stat-icon {
+  width: 48px; height: 48px;
+  border-radius: 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+/* ===== Dashboard sidebar ===== */
+.cw-sidebar {
+  background: #fff;
+  border-right: 1px solid var(--cw-border);
+  min-height: calc(100vh - 64px);
+  padding: 1.25rem 0.75rem;
+}
+.cw-sidebar .nav-link {
+  color: var(--cw-text);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+.cw-sidebar .nav-link:hover { background: #f1f3f7; color: var(--cw-primary); }
+.cw-sidebar .nav-link.active { background: var(--cw-primary); color: #fff; }
+@media (max-width: 991.98px) {
+  .cw-sidebar { min-height: auto; border-right: 0; border-bottom: 1px solid var(--cw-border); }
+}
+
+/* ===== Footer ===== */
+.cw-footer {
+  background: #0b2540;
+  color: #cdd6e4;
+  padding: 2.5rem 0 1.5rem;
+}
+.cw-footer a { color: #cdd6e4; text-decoration: none; }
+.cw-footer a:hover { color: #fff; }
+
+/* ===== Avatar ===== */
+.cw-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--cw-primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+.cw-avatar-lg { width: 96px; height: 96px; font-size: 2rem; }
+
+/* ===== Misc ===== */
+.section-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--cw-primary);
+}
+.cw-listing-img {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+  background: #e9ecef;
+  display: block;
+}
+
+/* ===== Logo — bigger and clearly visible ===== */
+.cw-brand { display: inline-flex; align-items: center; padding: 0.15rem 0; }
+.cw-logo-header {
+  height: 72px;
+  width: auto;
+  display: block;
+  max-width: 220px;
+}
+@media (max-width: 991.98px) { .cw-logo-header { height: 60px; } }
+@media (max-width: 575.98px) { .cw-logo-header { height: 52px; } }
+
+.cw-logo-footer {
+  height: 96px;
+  width: auto;
+  display: block;
+  max-width: 260px;
+  filter: brightness(0) invert(1);
+}
+@media (max-width: 575.98px) { .cw-logo-footer { height: 80px; } }
+
+/* ===== Category cards — equal sized image boxes ===== */
+.cw-category-card {
+  background: #fff;
+  border: 1px solid var(--cw-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.cw-category-card:hover { box-shadow: 0 8px 24px rgba(13,59,102,0.08); transform: translateY(-2px); }
+.cw-category-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  background: #eaf1fb;
+}
+.cw-category-body { padding: 1rem; text-align: center; }
+@media (max-width: 575.98px) { .cw-category-img { height: 130px; } }
+
+/* ===== Featured listing card — equal sized image boxes ===== */
+.cw-feature-card { display: flex; flex-direction: column; height: 100%; }
+.cw-feature-img-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #eaf1fb;
+}
+.cw-feature-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.cw-feature-card:hover .cw-feature-img-wrap img { transform: scale(1.04); }
+.cw-feature-body { padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; flex: 1; }
+.cw-feature-price { color: var(--cw-primary); font-weight: 700; }
