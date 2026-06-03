@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Electronics", "icon": "camera" },
+  { "id": 2, "name": "Power & Tools", "icon": "lightning-charge" },
+  { "id": 3, "name": "Vehicles", "icon": "truck" },
+  { "id": 4, "name": "Events", "icon": "speaker" },
+  { "id": 5, "name": "Construction", "icon": "tools" },
+  { "id": 6, "name": "Home & Garden", "icon": "house" }
+]

@@ -1,0 +1,8 @@
+[
+  { "ownerId": 1, "month": "2026-04", "amount": 18400 },
+  { "ownerId": 1, "month": "2026-05", "amount": 22800 },
+  { "ownerId": 1, "month": "2026-06", "amount": 14200 },
+  { "ownerId": 3, "month": "2026-04", "amount": 11000 },
+  { "ownerId": 3, "month": "2026-05", "amount": 15500 },
+  { "ownerId": 3, "month": "2026-06", "amount": 13500 }
+]

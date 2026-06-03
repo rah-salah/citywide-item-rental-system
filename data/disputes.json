@@ -1,0 +1,5 @@
+[
+  { "id": 7001, "bookingId": 5004, "reporterId": 2, "subject": "Item returned late", "status": "open", "escalated": false, "date": "2026-05-15" },
+  { "id": 7002, "bookingId": 5003, "reporterId": 1, "subject": "Minor scratch on lens", "status": "resolved", "escalated": false, "date": "2026-05-23" },
+  { "id": 7003, "bookingId": 5002, "reporterId": 3, "subject": "Renter unreachable", "status": "open", "escalated": true, "date": "2026-06-03" }
+]

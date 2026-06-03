@@ -1,0 +1,8 @@
+[
+  { "id": 1, "actor": "Super Admin", "action": "Created admin account", "target": "Anna Lopez", "date": "2026-05-01 09:14" },
+  { "id": 2, "actor": "Anna Lopez", "action": "Approved listing", "target": "Honda EU22i Generator", "date": "2026-05-03 11:02" },
+  { "id": 3, "actor": "Anna Lopez", "action": "Suspended user", "target": "Spam Account", "date": "2026-05-08 16:45" },
+  { "id": 4, "actor": "Super Admin", "action": "Updated site settings", "target": "Platform fee → 5%", "date": "2026-05-15 08:30" },
+  { "id": 5, "actor": "Super Admin", "action": "Added category", "target": "Construction", "date": "2026-05-20 14:11" },
+  { "id": 6, "actor": "Anna Lopez", "action": "Resolved dispute", "target": "#7002", "date": "2026-05-23 10:20" }
+]

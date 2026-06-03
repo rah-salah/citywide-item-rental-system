@@ -1,0 +1,6 @@
+[
+  { "id": 9001, "bookingId": 5001, "payerId": 2, "payeeId": 1, "amount": 2550, "fee": 128, "net": 2422, "date": "2026-06-01", "status": "completed" },
+  { "id": 9002, "bookingId": 5003, "payerId": 1, "payeeId": 1, "amount": 2400, "fee": 120, "net": 2280, "date": "2026-05-20", "status": "completed" },
+  { "id": 9003, "bookingId": 5004, "payerId": 2, "payeeId": 1, "amount": 3000, "fee": 150, "net": 2850, "date": "2026-05-12", "status": "completed" },
+  { "id": 9004, "bookingId": 5002, "payerId": 2, "payeeId": 3, "amount": 13500, "fee": 675, "net": 12825, "date": "2026-06-02", "status": "held" }
+]
