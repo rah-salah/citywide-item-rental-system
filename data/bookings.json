@@ -1,0 +1,7 @@
+[
+  { "id": 5001, "listingId": 101, "renterId": 2, "ownerId": 1, "start": "2026-06-01", "end": "2026-06-04", "days": 3, "total": 2550, "status": "active" },
+  { "id": 5002, "listingId": 104, "renterId": 2, "ownerId": 3, "start": "2026-06-02", "end": "2026-06-05", "days": 3, "total": 13500, "status": "pending" },
+  { "id": 5003, "listingId": 102, "renterId": 1, "ownerId": 1, "start": "2026-05-20", "end": "2026-05-22", "days": 2, "total": 2400, "status": "completed" },
+  { "id": 5004, "listingId": 103, "renterId": 2, "ownerId": 1, "start": "2026-05-12", "end": "2026-05-14", "days": 2, "total": 3000, "status": "completed" },
+  { "id": 5005, "listingId": 105, "renterId": 1, "ownerId": 3, "start": "2026-06-10", "end": "2026-06-12", "days": 2, "total": 1800, "status": "pending" }
+]

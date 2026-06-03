@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Maria Santos", "email": "maria@email.com", "password": "pass123", "role": ["owner", "renter"], "avatar": null, "status": "active" },
+  { "id": 2, "name": "Juan Reyes", "email": "juan@email.com", "password": "pass123", "role": ["renter"], "avatar": null, "status": "active" },
+  { "id": 3, "name": "Carlo Mendoza", "email": "carlo@email.com", "password": "pass123", "role": ["owner"], "avatar": null, "status": "active" },
+  { "id": 4, "name": "Anna Lopez", "email": "anna@email.com", "password": "admin123", "role": ["admin"], "avatar": null, "status": "active" },
+  { "id": 5, "name": "Super Admin", "email": "superadmin@email.com", "password": "super123", "role": ["super_admin"], "avatar": null, "status": "active" }
+]

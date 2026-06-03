@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Listings — Citywide Jigjiga</title>
-    <meta name="description" content="Manage your Citywide Jigjiga listings." />
+    <title>Contact — Citywide Jigjiga</title>
+    <meta name="description" content="Contact the Citywide Jigjiga team." />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -54,207 +54,83 @@
               <a class="nav-link" href="about.html">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="contact.html">Contact</a>
+              <a class="nav-link active" href="contact.html">Contact</a>
             </li>
           </ul>
-          <div class="dropdown ms-lg-auto">
-            <a
-              href="#"
-              class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              ><div class="cw-avatar-sm" data-user-initial>G</div></a
-            >
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-              <li>
-                <a class="dropdown-item" href="dashboard.html"
-                  ><i class="bi bi-speedometer2 me-2"></i>Dashboard</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="profile.html"
-                  ><i class="bi bi-person me-2"></i>Profile</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="settings.html"
-                  ><i class="bi bi-gear me-2"></i>Settings</a
-                >
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" href="logout.html"
-                  ><i class="bi bi-box-arrow-right me-2"></i>Logout</a
-                >
-              </li>
-            </ul>
+          <div class="d-flex ms-lg-auto align-items-lg-center">
+            <a class="btn cw-signin-btn ms-2" href="login.html">Sign In</a>
           </div>
         </div>
       </div>
     </nav>
 
-    <div class="container-fluid">
-      <div class="row">
-        <aside
-          class="col-lg-3 col-xl-2 cw-sidebar"
-          data-cw-sidebar
-          data-active="my-listings"
-        ></aside>
-        <main class="col-lg-9 col-xl-10 py-4 px-4">
-          <div
-            class="d-flex flex-wrap justify-content-between align-items-center mb-4"
-          >
-            <div>
-              <h2 class="mb-1">My Listings</h2>
-              <p class="text-muted mb-0">
-                Manage every item you have on Citywide.
-              </p>
+    <section class="py-5">
+      <div class="container" style="max-width: 820px">
+        <div class="text-center mb-4">
+          <p class="section-eyebrow">Get in touch</p>
+          <h2>Contact Citywide Jigjiga</h2>
+          <p class="text-muted">
+            Questions about renting, listing, or a partnership in Jigjiga? Send
+            us a message — we reply within 24 hours.
+          </p>
+        </div>
+        <div class="cw-card p-4 p-md-5">
+          <form action="contact.html" method="get">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">First name</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter your first name"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Last name</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter your last name"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Email</label
+                ><input
+                  type="email"
+                  class="form-control"
+                  placeholder="Enter your email address"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Phone</label
+                ><input
+                  type="tel"
+                  class="form-control"
+                  placeholder="Enter your phone number"
+                />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Message</label
+                ><textarea
+                  class="form-control"
+                  rows="5"
+                  placeholder="How can we help you?"
+                  required
+                ></textarea>
+              </div>
+              <div class="col-12 d-grid">
+                <button class="btn btn-brand btn-lg" type="submit">
+                  Send message
+                </button>
+              </div>
             </div>
-            <a href="add-item.html" class="btn btn-brand"
-              ><i class="bi bi-plus-lg me-1"></i> New listing</a
-            >
-          </div>
-          <div class="cw-card p-0">
-            <div class="table-responsive">
-              <table class="table align-middle mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th>Item</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Date created</th>
-                    <th>Daily price</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <span
-                          class="cw-stat-icon bg-brand-soft text-brand"
-                          style="width: 36px; height: 36px; font-size: 1rem"
-                          ><i class="bi bi-lightning-charge"></i></span
-                        ><span class="fw-semibold">Honda EU22i Generator</span>
-                      </div>
-                    </td>
-                    <td>Power Tools</td>
-                    <td><span class="badge bg-success">Active</span></td>
-                    <td>2026-04-12</td>
-                    <td class="fw-semibold">850 ETB</td>
-                    <td>
-                      <a href="#" class="btn btn-sm btn-outline-brand me-1"
-                        ><i class="bi bi-eye"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-secondary me-1"
-                        ><i class="bi bi-pencil"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-danger"
-                        ><i class="bi bi-trash"></i
-                      ></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <span
-                          class="cw-stat-icon bg-brand-soft text-brand"
-                          style="width: 36px; height: 36px; font-size: 1rem"
-                          ><i class="bi bi-camera"></i></span
-                        ><span class="fw-semibold">DJI Mavic 3 Drone</span>
-                      </div>
-                    </td>
-                    <td>Electronics</td>
-                    <td><span class="badge bg-primary">Booked</span></td>
-                    <td>2026-03-28</td>
-                    <td class="fw-semibold">1500 ETB</td>
-                    <td>
-                      <a href="#" class="btn btn-sm btn-outline-brand me-1"
-                        ><i class="bi bi-eye"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-secondary me-1"
-                        ><i class="bi bi-pencil"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-danger"
-                        ><i class="bi bi-trash"></i
-                      ></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <span
-                          class="cw-stat-icon bg-brand-soft text-brand"
-                          style="width: 36px; height: 36px; font-size: 1rem"
-                          ><i class="bi bi-music-note-beamed"></i></span
-                        ><span class="fw-semibold">Wedding Sound System</span>
-                      </div>
-                    </td>
-                    <td>Event Gear</td>
-                    <td><span class="badge bg-success">Active</span></td>
-                    <td>2026-03-15</td>
-                    <td class="fw-semibold">2200 ETB</td>
-                    <td>
-                      <a href="#" class="btn btn-sm btn-outline-brand me-1"
-                        ><i class="bi bi-eye"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-secondary me-1"
-                        ><i class="bi bi-pencil"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-danger"
-                        ><i class="bi bi-trash"></i
-                      ></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <span
-                          class="cw-stat-icon bg-brand-soft text-brand"
-                          style="width: 36px; height: 36px; font-size: 1rem"
-                          ><i class="bi bi-tools"></i></span
-                        ><span class="fw-semibold">Bosch Cordless Drill</span>
-                      </div>
-                    </td>
-                    <td>Tools</td>
-                    <td><span class="badge bg-secondary">Inactive</span></td>
-                    <td>2026-02-22</td>
-                    <td class="fw-semibold">220 ETB</td>
-                    <td>
-                      <a href="#" class="btn btn-sm btn-outline-brand me-1"
-                        ><i class="bi bi-eye"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-secondary me-1"
-                        ><i class="bi bi-pencil"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-danger"
-                        ><i class="bi bi-trash"></i
-                      ></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <span
-                          class="cw-stat-icon bg-brand-soft text-brand"
-                          style="width: 36px; height: 36px; font-size: 1rem"
-                          ><i class="bi bi-cup-hot"></i></span
-                        ><span class="fw-semibold">Industrial Coffee Urn</span>
-                      </div>
-                    </td>
-                    <td>Kitchen</td>
-                    <td><span class="badge bg-success">Active</span></td>
-                    <td>2026-02-10</td>
-                    <td class="fw-semibold">180 ETB</td>
-                    <td>
-                      <a href="#" class="btn btn-sm btn-outline-brand me-1"
-                        ><i class="bi bi-eye"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-secondary me-1"
-                        ><i class="bi bi-pencil"></i></a
-                      ><a href="#" class="btn btn-sm btn-outline-danger"
-                        ><i class="bi bi-trash"></i
-                      ></a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </main>
+          </form>
+        </div>
       </div>
-    </div>
+    </section>
 
     <footer class="cw-footer mt-5">
       <div class="container">
