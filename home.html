@@ -17,7 +17,7 @@
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
@@ -67,39 +67,56 @@
       </div>
     </nav>
 
-    <section class="cw-hero">
-      <div class="container">
+    <!-- Modern hero with video background (original two-column layout preserved) -->
+    <section class="cw-hero cw-hero-modern">
+      <video
+        class="cw-hero-bg-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster="images/event-gear.jpg"
+      >
+        <source src="images/hero-bg.mp4" type="video/mp4" />
+      </video>
+      <div class="cw-hero-overlay"></div>
+      <div class="container position-relative">
         <div class="row align-items-center g-5">
-          <div class="col-lg-7">
+          <div class="col-lg-7 cw-hero-copy">
             <span class="eyebrow mb-3"
-              >Trusted across Jigjiga · 2,400+ local listings</span
+              ><i class="bi bi-geo-alt-fill me-1"></i> Trusted across Jigjiga ·
+              2,400+ local listings</span
             >
-            <h1 class="display-4 fw-bold mt-3">
-              Rent Anything Nearby in Jigjiga
+            <h1 class="display-3 fw-bold mt-3 cw-hero-title">
+              Rent <span class="cw-hero-accent">Anything</span> Nearby in
+              Jigjiga
             </h1>
-            <p class="lead mt-3 mb-4">
+            <p class="lead mt-3 mb-4 cw-hero-lead">
               Jigjiga's trusted marketplace for renting and sharing items
               locally. Pay in ETB. Safe escrow on every booking.
             </p>
             <div class="d-flex flex-wrap gap-2">
-              <a href="listings.html" class="btn btn-light btn-lg"
-                >Browse Rentals</a
+              <a href="listings.html" class="btn btn-light btn-lg cw-hero-cta"
+                ><i class="bi bi-search me-2"></i>Browse Rentals</a
               >
-              <a href="add-item.html" class="btn btn-outline-light btn-lg"
-                >List Your Item</a
+              <a
+                href="add-item.html"
+                class="btn btn-outline-light btn-lg cw-hero-cta"
+                ><i class="bi bi-plus-lg me-2"></i>List Your Item</a
               >
             </div>
           </div>
           <div class="col-lg-5">
-            <div class="bg-white text-dark p-4 rounded-3 shadow">
-              <h5 class="mb-3">Find what you need</h5>
+            <div class="cw-hero-search-card p-4 rounded-4 shadow-lg">
+              <h5 class="mb-3 fw-bold">Find what you need</h5>
               <div class="mb-3">
                 <label class="form-label small fw-semibold"
                   >What do you need?</label
                 >
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control form-control-lg"
                   placeholder="Search listings..."
                 />
               </div>
@@ -107,7 +124,7 @@
                 <label class="form-label small fw-semibold"
                   >Where in Jigjiga?</label
                 >
-                <select class="form-select">
+                <select class="form-select form-select-lg">
                   <option>All areas</option>
                   <option>Suq-Hassan / Aw-Danbe</option>
                   <option>Suq-Yare</option>
@@ -122,18 +139,23 @@
                   <option>Lanta-Wada</option>
                   <option>Qaryan-Dhodan</option>
                   <option>Ayar-Daga (Airport Zone)</option>
-                  <option>Xaafada 01 (Kebele 01)</option>
-                  <option>Xaafada 02 (Kebele 02)</option>
-                  <option>Xaafada 03 (Kebele 03)</option>
-                  <option>Xaafada 04 (Kebele 04)</option>
                 </select>
               </div>
-              <a href="listings.html" class="btn btn-brand w-100">Search</a>
+              <a href="listings.html" class="btn btn-brand btn-lg w-100"
+                ><i class="bi bi-search me-2"></i>Search</a
+              >
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Featured ads slim carousel: rendered by app.js -->
+    <section
+      class="cw-featured-strip"
+      id="cwHeroCarousel"
+      aria-label="Featured ads"
+    ></section>
 
     <section class="py-5">
       <div class="container">
