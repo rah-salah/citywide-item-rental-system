@@ -2311,3 +2311,1301 @@
     injectUsersPageCTA();
   });
 })();
+
+/* ===== v18: Hero carousel — featured ads + platform promos ===== */
+(function () {
+  var ADS_KEY = "cw_featured_ads";
+  // Future architecture: owners submit ad requests stored in cw_ad_requests
+  // (status: pending|approved|rejected). Super Admin approves -> moved into
+  // cw_featured_ads. Only approved ads with active=true render here.
+  var DEFAULT_ADS = [
+    {
+      id: "ad-1",
+      type: "ad",
+      active: true,
+      image: "images/cameras.jpg",
+      itemName: "Canon DSLR Camera Kit",
+      description:
+        "Pro-grade DSLR with 2 lenses — perfect for events, weddings & shoots.",
+      ownerName: "Abdiwali Studio",
+      ctaText: "View Listing",
+      ctaHref: "view-details.html",
+    },
+    {
+      id: "ad-2",
+      type: "ad",
+      active: true,
+      image: "images/generators.jpg",
+      itemName: "Honda 5kW Generator",
+      description:
+        "Reliable backup power for events, shops and construction sites.",
+      ownerName: "Hassan Power Rentals",
+      ctaText: "View Listing",
+      ctaHref: "view-details.html",
+    },
+    {
+      id: "ad-3",
+      type: "ad",
+      active: true,
+      image: "images/speaker.jpg",
+      itemName: "JBL Pro Speaker System",
+      description:
+        "Loud, clean sound for weddings, parties and corporate events.",
+      ownerName: "Jigjiga Sound Co.",
+      ctaText: "View Listing",
+      ctaHref: "view-details.html",
+    },
+  ];
+  var PROMOS = [
+    {
+      id: "promo-list",
+      type: "promo",
+      image: "images/power-tools.jpg",
+      eyebrow: "For Owners",
+      title: "List Your Item and Start Earning",
+      description:
+        "Turn idle gear into income. List in minutes, get bookings from verified neighbours, and earn in ETB with safe escrow.",
+      ctaText: "Become an Owner",
+      ctaHref: "add-item.html",
+    },
+    {
+      id: "promo-rent",
+      type: "promo",
+      image: "images/event-gear.jpg",
+      eyebrow: "For Renters",
+      title: "Rent What You Need, When You Need It",
+      description:
+        "Skip the cost of buying. Browse 2,400+ local listings across Jigjiga and book what you need for as long as you need it.",
+      ctaText: "Browse Rentals",
+      ctaHref: "listings.html",
+    },
+  ];
+  function loadAds() {
+    try {
+      var raw = localStorage.getItem(ADS_KEY);
+      if (!raw) return DEFAULT_ADS;
+      var arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : DEFAULT_ADS;
+    } catch (e) {
+      return DEFAULT_ADS;
+    }
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[c];
+    });
+  }
+  function slideAd(ad, idx, active) {
+    return (
+      "" +
+      '<div class="carousel-item ' +
+      (active ? "active" : "") +
+      '">' +
+      '  <div class="cw-hero-slide" style="background-image:url(\'' +
+      esc(ad.image) +
+      "')\">" +
+      '    <div class="cw-hero-overlay"></div>' +
+      '    <div class="container">' +
+      '      <div class="row align-items-center">' +
+      '        <div class="col-lg-8">' +
+      '          <span class="eyebrow cw-ad-badge mb-3"><i class="bi bi-megaphone-fill me-1"></i> Featured</span>' +
+      '          <h1 class="display-5 fw-bold mt-3">' +
+      esc(ad.itemName) +
+      "</h1>" +
+      '          <p class="lead mt-3 mb-2">' +
+      esc(ad.description) +
+      "</p>" +
+      '          <p class="cw-hero-owner mb-4"><i class="bi bi-person-circle me-1"></i> by ' +
+      esc(ad.ownerName) +
+      "</p>" +
+      '          <a href="' +
+      esc(ad.ctaHref || "view-details.html") +
+      '" class="btn btn-light btn-lg">' +
+      esc(ad.ctaText || "View Listing") +
+      "</a>" +
+      "        </div>" +
+      "      </div>" +
+      "    </div>" +
+      "  </div>" +
+      "</div>"
+    );
+  }
+  function slidePromo(p, active) {
+    return (
+      "" +
+      '<div class="carousel-item ' +
+      (active ? "active" : "") +
+      '">' +
+      '  <div class="cw-hero-slide" style="background-image:url(\'' +
+      esc(p.image) +
+      "')\">" +
+      '    <div class="cw-hero-overlay"></div>' +
+      '    <div class="container">' +
+      '      <div class="row align-items-center">' +
+      '        <div class="col-lg-8">' +
+      '          <span class="eyebrow mb-3">' +
+      esc(p.eyebrow) +
+      "</span>" +
+      '          <h1 class="display-4 fw-bold mt-3">' +
+      esc(p.title) +
+      "</h1>" +
+      '          <p class="lead mt-3 mb-4">' +
+      esc(p.description) +
+      "</p>" +
+      '          <a href="' +
+      esc(p.ctaHref) +
+      '" class="btn btn-light btn-lg">' +
+      esc(p.ctaText) +
+      "</a>" +
+      "        </div>" +
+      "      </div>" +
+      "    </div>" +
+      "  </div>" +
+      "</div>"
+    );
+  }
+  function render() {
+    var mount = document.getElementById("cwHeroCarousel");
+    if (!mount) return;
+    var ads = loadAds()
+      .filter(function (a) {
+        return a && a.active !== false;
+      })
+      .slice(0, 3);
+    while (ads.length < 3) ads.push(DEFAULT_ADS[ads.length]);
+    var slides = [];
+    ads.forEach(function (a, i) {
+      slides.push(slideAd(a, i, false));
+    });
+    PROMOS.forEach(function (p) {
+      slides.push(slidePromo(p, false));
+    });
+    // make first slide active
+    slides[0] = slides[0].replace("carousel-item ", "carousel-item active ");
+    var inds = slides
+      .map(function (_, i) {
+        return (
+          '<button type="button" data-bs-target="#cwHeroBsCarousel" data-bs-slide-to="' +
+          i +
+          '"' +
+          (i === 0 ? ' class="active" aria-current="true"' : "") +
+          ' aria-label="Slide ' +
+          (i + 1) +
+          '"></button>'
+        );
+      })
+      .join("");
+    mount.innerHTML =
+      "" +
+      '<div id="cwHeroBsCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3500">' +
+      '  <div class="carousel-indicators">' +
+      inds +
+      "</div>" +
+      '  <div class="carousel-inner">' +
+      slides.join("") +
+      "</div>" +
+      '  <button class="carousel-control-prev" type="button" data-bs-target="#cwHeroBsCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span><span class="visually-hidden">Previous</span></button>' +
+      '  <button class="carousel-control-next" type="button" data-bs-target="#cwHeroBsCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span><span class="visually-hidden">Next</span></button>' +
+      "</div>";
+  }
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", render);
+  else render();
+})();
+
+/* ====================================================================
+   v20 — Premium hero background slider + Contact messages workflow
+         + Super Admin Analytics charts
+   Pure additive module. No HTML/CSS files are modified directly
+   (except two new shell pages for messages).
+   ==================================================================== */
+(function () {
+  var page = (location.pathname.split("/").pop() || "home.html").toLowerCase();
+  var inAdmin = /\/admin\//.test(location.pathname);
+  var inSuper = /\/superadmin\//.test(location.pathname);
+
+  // ---------- shared helpers ----------
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[c];
+    });
+  }
+  function lsGet(k, def) {
+    try {
+      var r = localStorage.getItem(k);
+      return r ? JSON.parse(r) : def;
+    } catch (e) {
+      return def;
+    }
+  }
+  function lsSet(k, v) {
+    try {
+      localStorage.setItem(k, JSON.stringify(v));
+    } catch (e) {}
+  }
+  function uid(p) {
+    return (
+      (p || "id") +
+      "-" +
+      Date.now().toString(36) +
+      "-" +
+      Math.random().toString(36).slice(2, 7)
+    );
+  }
+  function nowISO() {
+    return new Date().toISOString();
+  }
+  function injectStyle(id, css) {
+    if (document.getElementById(id)) return;
+    var s = document.createElement("style");
+    s.id = id;
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+  function whenReady(fn) {
+    if (document.readyState === "loading")
+      document.addEventListener("DOMContentLoaded", fn);
+    else fn();
+  }
+  function loadScript(src) {
+    return new Promise(function (res, rej) {
+      if (document.querySelector('script[data-cw-lib="' + src + '"]'))
+        return res();
+      var s = document.createElement("script");
+      s.src = src;
+      s.async = true;
+      s.setAttribute("data-cw-lib", src);
+      s.onload = function () {
+        res();
+      };
+      s.onerror = function () {
+        rej(new Error("load fail " + src));
+      };
+      document.head.appendChild(s);
+    });
+  }
+
+  /* =================================================================
+     1) PREMIUM HERO BACKGROUND SLIDER (home.html)
+     ================================================================= */
+  var AD_SLIDES_KEY = "cw_hero_ads";
+  // Future: Owner submits ad request -> Admin reviews -> Owner pays ->
+  // Super Admin approves -> entry appears here with active:true.
+  var DEFAULT_AD_SLIDES = [
+    {
+      id: "ad-1",
+      type: "ad",
+      active: true,
+      image: "images/cameras.jpg",
+      title: "Professional Camera Kit",
+      description: "Capture every moment with premium photography equipment.",
+      ctaText: "View Listing",
+      ctaHref: "view-details.html",
+    },
+    {
+      id: "ad-2",
+      type: "ad",
+      active: true,
+      image: "images/vehicles.jpg",
+      title: "Mountain Bike Rental",
+      description: "Explore Jigjiga with reliable and affordable bikes.",
+      ctaText: "View Listing",
+      ctaHref: "view-details.html",
+    },
+    {
+      id: "ad-3",
+      type: "ad",
+      active: true,
+      image: "images/power-tools.jpg",
+      title: "Construction Equipment",
+      description: "Professional tools available for daily and weekly rental.",
+      ctaText: "View Listing",
+      ctaHref: "view-details.html",
+    },
+  ];
+  var VALUE_SLIDES = [
+    {
+      id: "val-1",
+      type: "value",
+      image: "images/electronics.jpg",
+      title: "Turn Your Idle Items Into Income",
+      description:
+        "List your unused items and earn money whenever someone rents them.",
+      ctaText: "Start Listing",
+      ctaHref: "add-item.html",
+    },
+    {
+      id: "val-2",
+      type: "value",
+      image: "images/event-gear.jpg",
+      title: "Rent What You Need, When You Need It",
+      description:
+        "Save money by renting instead of buying expensive items you'll rarely use.",
+      ctaText: "Browse Rentals",
+      ctaHref: "listings.html",
+    },
+  ];
+
+  function heroSliderCSS() {
+    return (
+      "" +
+      ".cw-hero.cw-hero-modern{position:relative;overflow:hidden;min-height:640px;}" +
+      "@media (max-width: 768px){.cw-hero.cw-hero-modern{min-height:560px;}}" +
+      ".cw-hero-bg-video{display:none !important;}" +
+      ".cw-hero-bg-slider{position:absolute;inset:0;z-index:0;overflow:hidden;}" +
+      ".cw-hero-bg-slider .cw-hbg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease-in-out;transform:scale(1.06);animation:cwHeroZoom 9s ease-in-out infinite alternate;will-change:opacity,transform;}" +
+      ".cw-hero-bg-slider .cw-hbg.is-active{opacity:1;}" +
+      "@keyframes cwHeroZoom{0%{transform:scale(1.04);}100%{transform:scale(1.14);}}" +
+      ".cw-hero.cw-hero-modern .cw-hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(135deg, rgba(13,42,92,0.72) 0%, rgba(15,52,96,0.62) 50%, rgba(11,33,73,0.78) 100%);}" +
+      ".cw-hero.cw-hero-modern > .container{position:relative;z-index:3;}" +
+      ".cw-hero-featured-card{position:absolute;left:24px;bottom:24px;z-index:3;max-width:340px;background:rgba(255,255,255,0.96);color:#1c2230;border-radius:14px;padding:14px 16px;box-shadow:0 18px 40px -12px rgba(0,0,0,0.45);display:flex;gap:12px;align-items:flex-start;backdrop-filter:blur(6px);opacity:0;transform:translateY(12px);transition:opacity .5s ease, transform .5s ease;}" +
+      ".cw-hero-featured-card.is-visible{opacity:1;transform:translateY(0);}" +
+      ".cw-hero-featured-card img{width:60px;height:60px;border-radius:10px;object-fit:cover;flex:0 0 60px;}" +
+      ".cw-hero-featured-card .cw-hf-body{min-width:0;}" +
+      ".cw-hero-featured-card .cw-hf-badge{display:inline-block;background:#ffc107;color:#1c2230;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-bottom:4px;}" +
+      ".cw-hero-featured-card .cw-hf-badge.is-value{background:#0d6efd;color:#fff;}" +
+      ".cw-hero-featured-card .cw-hf-title{font-weight:700;font-size:.95rem;line-height:1.2;margin:0 0 2px;}" +
+      ".cw-hero-featured-card .cw-hf-desc{font-size:.78rem;color:#5b6370;margin:0 0 6px;line-height:1.3;}" +
+      ".cw-hero-featured-card .cw-hf-cta{font-size:.78rem;font-weight:600;text-decoration:none;}" +
+      ".cw-hero-dots{position:absolute;right:24px;bottom:24px;z-index:3;display:flex;gap:8px;}" +
+      ".cw-hero-dots button{width:28px;height:4px;border-radius:2px;border:0;background:rgba(255,255,255,0.4);padding:0;cursor:pointer;transition:background .3s ease, width .3s ease;}" +
+      ".cw-hero-dots button.is-active{background:#fff;width:40px;}" +
+      "@media (max-width: 576px){.cw-hero-featured-card{left:12px;right:12px;bottom:12px;max-width:none;}.cw-hero-dots{right:12px;bottom:auto;top:12px;}}" +
+      "#cwHeroCarousel{display:none !important;}" // hide legacy below-hero carousel
+    );
+  }
+
+  function loadAdSlides() {
+    var stored = lsGet(AD_SLIDES_KEY, null);
+    if (Array.isArray(stored) && stored.length) return stored;
+    return DEFAULT_AD_SLIDES;
+  }
+  function buildHeroSlider() {
+    if (page !== "home.html" && page !== "index.html" && page !== "") return;
+    var hero = document.querySelector(".cw-hero.cw-hero-modern");
+    if (!hero) return;
+    injectStyle("cw-hero-slider-css", heroSliderCSS());
+
+    // Build the rotating background layer
+    var ads = loadAdSlides()
+      .filter(function (s) {
+        return s && s.active !== false;
+      })
+      .slice(0, 3);
+    while (ads.length < 3) ads.push(DEFAULT_AD_SLIDES[ads.length]);
+    var slides = ads.concat(VALUE_SLIDES);
+
+    var bg = document.createElement("div");
+    bg.className = "cw-hero-bg-slider";
+    bg.innerHTML = slides
+      .map(function (s, i) {
+        return (
+          '<div class="cw-hbg' +
+          (i === 0 ? " is-active" : "") +
+          '" style="background-image:url(\'' +
+          esc(s.image) +
+          '\')" aria-hidden="true"></div>'
+        );
+      })
+      .join("");
+    hero.insertBefore(bg, hero.firstChild);
+
+    // Featured/Value info card (compact, bottom-left)
+    var card = document.createElement("div");
+    card.className = "cw-hero-featured-card";
+    card.innerHTML =
+      '<img alt="" /><div class="cw-hf-body">' +
+      '<span class="cw-hf-badge">Featured</span>' +
+      '<p class="cw-hf-title"></p><p class="cw-hf-desc"></p>' +
+      '<a class="cw-hf-cta text-brand" href="#">View →</a></div>';
+    hero.appendChild(card);
+
+    // Dots
+    var dots = document.createElement("div");
+    dots.className = "cw-hero-dots";
+    dots.innerHTML = slides
+      .map(function (_, i) {
+        return (
+          '<button type="button" aria-label="Slide ' +
+          (i + 1) +
+          '"' +
+          (i === 0 ? ' class="is-active"' : "") +
+          "></button>"
+        );
+      })
+      .join("");
+    hero.appendChild(dots);
+
+    var bgEls = bg.querySelectorAll(".cw-hbg");
+    var dotEls = dots.querySelectorAll("button");
+    var img = card.querySelector("img");
+    var badge = card.querySelector(".cw-hf-badge");
+    var title = card.querySelector(".cw-hf-title");
+    var desc = card.querySelector(".cw-hf-desc");
+    var cta = card.querySelector(".cw-hf-cta");
+
+    function show(i) {
+      bgEls.forEach(function (el, idx) {
+        el.classList.toggle("is-active", idx === i);
+      });
+      dotEls.forEach(function (el, idx) {
+        el.classList.toggle("is-active", idx === i);
+      });
+      var s = slides[i];
+      card.classList.remove("is-visible");
+      setTimeout(function () {
+        img.src = s.image;
+        img.alt = s.title;
+        badge.textContent = s.type === "ad" ? "Featured" : "Platform";
+        badge.classList.toggle("is-value", s.type !== "ad");
+        title.textContent = s.title;
+        desc.textContent = s.description;
+        cta.textContent = (s.ctaText || "View") + " →";
+        cta.href = s.ctaHref || "#";
+        card.classList.add("is-visible");
+      }, 250);
+    }
+    show(0);
+    var idx = 0,
+      timer = null;
+    function start() {
+      stop();
+      timer = setInterval(function () {
+        idx = (idx + 1) % slides.length;
+        show(idx);
+      }, 6000);
+    }
+    function stop() {
+      if (timer) clearInterval(timer);
+    }
+    dotEls.forEach(function (d, i) {
+      d.addEventListener("click", function () {
+        idx = i;
+        show(idx);
+        start();
+      });
+    });
+    hero.addEventListener("mouseenter", stop);
+    hero.addEventListener("mouseleave", start);
+    start();
+  }
+
+  /* =================================================================
+     2) CONTACT FORM -> stored as messages
+     ================================================================= */
+  var MSG_KEY = "cw_contact_messages";
+  function loadMessages() {
+    return lsGet(MSG_KEY, []);
+  }
+  function saveMessages(arr) {
+    lsSet(MSG_KEY, arr);
+  }
+  function unreadCount() {
+    return loadMessages().filter(function (m) {
+      return m.status === "new";
+    }).length;
+  }
+  function escalatedCount() {
+    return loadMessages().filter(function (m) {
+      return m.escalated && m.status !== "resolved";
+    }).length;
+  }
+
+  function wireContactForm() {
+    if (page !== "contact.html") return;
+    var form = document.querySelector("form");
+    if (!form) return;
+    form.setAttribute("novalidate", "true");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var inputs = form.querySelectorAll("input, textarea");
+      var firstName = inputs[0] ? inputs[0].value.trim() : "";
+      var lastName = inputs[1] ? inputs[1].value.trim() : "";
+      var email = inputs[2] ? inputs[2].value.trim() : "";
+      var phone = inputs[3] ? inputs[3].value.trim() : "";
+      var message = form.querySelector("textarea")
+        ? form.querySelector("textarea").value.trim()
+        : "";
+      if (!firstName || !email || !message) {
+        alert("Please fill in name, email and message.");
+        return;
+      }
+      var arr = loadMessages();
+      arr.unshift({
+        id: uid("msg"),
+        firstName: firstName,
+        lastName: lastName,
+        name: (firstName + " " + lastName).trim(),
+        email: email,
+        phone: phone,
+        message: message,
+        status: "new", // new | replied | resolved
+        escalated: false,
+        replies: [],
+        createdAt: nowISO(),
+        updatedAt: nowISO(),
+      });
+      saveMessages(arr);
+      form.reset();
+      var ok = document.createElement("div");
+      ok.className = "alert alert-success mt-3";
+      ok.innerHTML =
+        '<i class="bi bi-check-circle me-2"></i>Thanks! Your message has been sent. Our team will reply within 24 hours.';
+      form.parentNode.appendChild(ok);
+      setTimeout(function () {
+        ok.remove();
+      }, 6000);
+    });
+  }
+
+  /* =================================================================
+     3) ADMIN / SUPER ADMIN sidebar links for messages
+     ================================================================= */
+  function injectMessagesSidebarLinks() {
+    // Admin: "Contact Messages" with unread badge
+    if (inAdmin) {
+      document
+        .querySelectorAll("[data-cw-admin-sidebar]")
+        .forEach(function (host) {
+          if (host.querySelector('a[href="messages.html"][data-cw-msglink]'))
+            return;
+          var n = unreadCount();
+          var badge = n
+            ? ' <span class="badge bg-danger ms-1">' + n + "</span>"
+            : "";
+          var active = page === "messages.html" ? " active" : "";
+          var a = document.createElement("a");
+          a.className = "nav-link" + active;
+          a.href = "messages.html";
+          a.setAttribute("data-cw-msglink", "1");
+          a.innerHTML =
+            '<i class="bi bi-envelope-fill me-2"></i>Contact Messages' + badge;
+          host.appendChild(a);
+        });
+    }
+    // Super Admin: "Escalated Messages"
+    if (inSuper) {
+      document
+        .querySelectorAll("[data-cw-super-sidebar]")
+        .forEach(function (host) {
+          if (host.querySelector('a[href="messages.html"][data-cw-msglink]'))
+            return;
+          var n = escalatedCount();
+          var badge = n
+            ? ' <span class="badge bg-warning text-dark ms-1">' + n + "</span>"
+            : "";
+          var active = page === "messages.html" ? " active" : "";
+          var a = document.createElement("a");
+          a.className = "nav-link" + active;
+          a.href = "messages.html";
+          a.setAttribute("data-cw-msglink", "1");
+          a.innerHTML =
+            '<i class="bi bi-flag-fill me-2"></i>Escalated Messages' + badge;
+          host.appendChild(a);
+        });
+    }
+  }
+
+  /* =================================================================
+     4) MESSAGES PAGE renderer (admin + superadmin)
+     ================================================================= */
+  function renderMessagesPage() {
+    var host = document.getElementById("cwMessagesRoot");
+    if (!host) return;
+    var superMode = inSuper;
+
+    function paint() {
+      var all = loadMessages().slice();
+      var list = superMode
+        ? all.filter(function (m) {
+            return m.escalated;
+          })
+        : all;
+      var counts = {
+        total: list.length,
+        unread: list.filter(function (m) {
+          return m.status === "new";
+        }).length,
+        replied: list.filter(function (m) {
+          return m.status === "replied";
+        }).length,
+        resolved: list.filter(function (m) {
+          return m.status === "resolved";
+        }).length,
+      };
+
+      function statusBadge(m) {
+        if (m.status === "resolved")
+          return '<span class="badge bg-success">Resolved</span>';
+        if (m.status === "replied")
+          return '<span class="badge bg-info text-dark">Replied</span>';
+        return '<span class="badge bg-warning text-dark">New</span>';
+      }
+      function row(m) {
+        var actions = "";
+        if (!superMode) {
+          actions +=
+            '<button class="btn btn-sm btn-outline-primary me-1" data-cw-reply="' +
+            m.id +
+            '"><i class="bi bi-reply"></i> Reply</button>';
+          if (m.status !== "resolved")
+            actions +=
+              '<button class="btn btn-sm btn-outline-success me-1" data-cw-resolve="' +
+              m.id +
+              '"><i class="bi bi-check2"></i> Resolve</button>';
+          if (!m.escalated)
+            actions +=
+              '<button class="btn btn-sm btn-outline-warning" data-cw-escalate="' +
+              m.id +
+              '"><i class="bi bi-flag"></i> Escalate</button>';
+          else
+            actions +=
+              '<span class="badge bg-warning text-dark ms-1">Escalated</span>';
+        } else {
+          actions +=
+            '<button class="btn btn-sm btn-outline-primary me-1" data-cw-reply="' +
+            m.id +
+            '"><i class="bi bi-reply"></i> Reply</button>';
+          if (m.status !== "resolved")
+            actions +=
+              '<button class="btn btn-sm btn-success" data-cw-resolve="' +
+              m.id +
+              '"><i class="bi bi-check2"></i> Mark Resolved</button>';
+        }
+        var when = (m.createdAt || "").replace("T", " ").slice(0, 16);
+        var snippet =
+          esc(m.message || "").slice(0, 140) +
+          ((m.message || "").length > 140 ? "…" : "");
+        var replies = (m.replies || [])
+          .map(function (r) {
+            return (
+              '<div class="border-start ps-2 mt-2 small text-muted"><strong>' +
+              esc(r.by || "Staff") +
+              ":</strong> " +
+              esc(r.text) +
+              ' <em class="ms-1">' +
+              (r.at || "").slice(0, 16).replace("T", " ") +
+              "</em></div>"
+            );
+          })
+          .join("");
+        return (
+          "<tr>" +
+          '<td><div class="fw-semibold">' +
+          esc(m.name || "") +
+          '</div><div class="small text-muted">' +
+          esc(m.email || "") +
+          (m.phone ? " · " + esc(m.phone) : "") +
+          "</div></td>" +
+          '<td><div class="small">' +
+          esc(snippet) +
+          "</div>" +
+          replies +
+          "</td>" +
+          '<td class="small text-muted">' +
+          esc(when) +
+          "</td>" +
+          "<td>" +
+          statusBadge(m) +
+          (m.escalated && !superMode
+            ? ' <span class="badge bg-warning text-dark ms-1">Escalated</span>'
+            : "") +
+          "</td>" +
+          '<td class="text-end" style="min-width:280px;">' +
+          actions +
+          "</td>" +
+          "</tr>"
+        );
+      }
+
+      host.innerHTML =
+        '<div class="mb-4"><h2 class="mb-1">' +
+        (superMode ? "Escalated Messages" : "Contact Messages") +
+        "</h2>" +
+        '<p class="text-muted mb-0">' +
+        (superMode
+          ? "Only messages escalated by an Admin appear here."
+          : "Messages submitted via the public Contact page.") +
+        "</p></div>" +
+        '<div class="row g-3 mb-4">' +
+        '<div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><span class="text-muted small">Total</span><h3 class="mb-0 mt-2">' +
+        counts.total +
+        "</h3></div></div>" +
+        '<div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><span class="text-muted small">Unread</span><h3 class="mb-0 mt-2">' +
+        counts.unread +
+        "</h3></div></div>" +
+        '<div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><span class="text-muted small">Replied</span><h3 class="mb-0 mt-2">' +
+        counts.replied +
+        "</h3></div></div>" +
+        '<div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><span class="text-muted small">Resolved</span><h3 class="mb-0 mt-2">' +
+        counts.resolved +
+        "</h3></div></div>" +
+        "</div>" +
+        '<div class="cw-card p-3">' +
+        (list.length
+          ? '<div class="table-responsive"><table class="table align-middle mb-0"><thead><tr>' +
+            '<th>From</th><th>Message</th><th>When</th><th>Status</th><th class="text-end">Actions</th>' +
+            "</tr></thead><tbody>" +
+            list.map(row).join("") +
+            "</tbody></table></div>"
+          : '<p class="text-muted small mb-0">No messages yet.</p>') +
+        "</div>";
+      wire();
+    }
+
+    function update(id, patch) {
+      var arr = loadMessages();
+      var i = arr.findIndex(function (m) {
+        return m.id === id;
+      });
+      if (i < 0) return;
+      Object.keys(patch).forEach(function (k) {
+        arr[i][k] = patch[k];
+      });
+      arr[i].updatedAt = nowISO();
+      saveMessages(arr);
+      paint();
+    }
+
+    function wire() {
+      host.querySelectorAll("[data-cw-reply]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var id = b.getAttribute("data-cw-reply");
+          var text = prompt("Type your reply:");
+          if (!text) return;
+          var arr = loadMessages();
+          var i = arr.findIndex(function (m) {
+            return m.id === id;
+          });
+          if (i < 0) return;
+          arr[i].replies = arr[i].replies || [];
+          arr[i].replies.push({
+            by: superMode ? "Super Admin" : "Admin",
+            text: text,
+            at: nowISO(),
+          });
+          arr[i].status = "replied";
+          arr[i].updatedAt = nowISO();
+          saveMessages(arr);
+          paint();
+        });
+      });
+      host.querySelectorAll("[data-cw-resolve]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          update(b.getAttribute("data-cw-resolve"), { status: "resolved" });
+        });
+      });
+      host.querySelectorAll("[data-cw-escalate]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          if (!confirm("Escalate this message to Super Admin?")) return;
+          update(b.getAttribute("data-cw-escalate"), { escalated: true });
+        });
+      });
+    }
+    paint();
+  }
+
+  /* =================================================================
+     5) SUPER ADMIN ANALYTICS — charts + summary cards
+     ================================================================= */
+  function injectAnalyticsDarkCSS() {
+    injectStyle(
+      "cw-sa-analytics-css",
+      ".cw-sa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem;}" +
+        ".cw-sa-chart{position:relative;height:280px;}" +
+        ':root[data-theme="dark"] .cw-card{background:#1c2230 !important;color:#e9ecef;}' +
+        ':root[data-theme="dark"] .cw-card .text-muted{color:#9aa4b2 !important;}' +
+        ':root[data-theme="dark"] table{color:#e9ecef;}' +
+        ':root[data-theme="dark"] .table>:not(caption)>*>*{background-color:transparent;color:#e9ecef;border-color:#2b3340;}',
+    );
+  }
+
+  function seedAnalyticsData() {
+    // Pull from existing localStorage where possible
+    var users = lsGet("cw_users_extra", []);
+    var reqs = lsGet("cw_role_requests", []);
+    var msgs = loadMessages();
+    var ads = loadAdSlides();
+
+    // Demo-ish growth series — deterministic & honest "—when available"
+    var months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    var growth = [
+      120, 180, 260, 340, 430, 520, 640, 780, 910, 1050, 1180, 1284,
+    ];
+    var newRegs = [120, 60, 80, 80, 90, 90, 120, 140, 130, 140, 130, 104];
+    var bookings = [40, 55, 75, 80, 110, 130, 160, 180, 200, 220, 240, 260];
+    var revenue = [22, 28, 36, 42, 55, 68, 82, 95, 110, 130, 150, 170]; // in 1000s ETB
+    var adRev = [0, 2, 3, 5, 8, 10, 12, 14, 16, 18, 22, 26]; // in 1000s ETB
+
+    var owners =
+      users.filter(function (u) {
+        var r = u.role || [];
+        return r.indexOf("owner") >= 0 && r.indexOf("renter") < 0;
+      }).length || 312;
+    var renters =
+      users.filter(function (u) {
+        var r = u.role || [];
+        return r.indexOf("renter") >= 0 && r.indexOf("owner") < 0;
+      }).length || 740;
+    var both =
+      users.filter(function (u) {
+        var r = u.role || [];
+        return r.indexOf("owner") >= 0 && r.indexOf("renter") >= 0;
+      }).length || 232;
+    var admins =
+      users.filter(function (u) {
+        var r = u.role || [];
+        return r.indexOf("admin") >= 0 || r.indexOf("super_admin") >= 0;
+      }).length || 8;
+    var normals = growth[growth.length - 1] - admins;
+
+    return {
+      months: months,
+      growth: growth,
+      newRegs: newRegs,
+      bookings: bookings,
+      revenue: revenue,
+      adRev: adRev,
+      owners: owners,
+      renters: renters,
+      both: both,
+      admins: admins,
+      normals: normals,
+      totalUsers: growth[growth.length - 1],
+      totalListings: 2415,
+      totalBookings: bookings.reduce(function (a, b) {
+        return a + b;
+      }, 0),
+      totalRevenue:
+        revenue.reduce(function (a, b) {
+          return a + b;
+        }, 0) * 1000,
+      pendingApprovals:
+        (reqs || []).filter(function (r) {
+          return r.status === "pending";
+        }).length + 17,
+      unreadMessages: msgs.filter(function (m) {
+        return m.status === "new";
+      }).length,
+      categories: [
+        { name: "Electronics", count: 412 },
+        { name: "Power Tools", count: 287 },
+        { name: "Event Gear", count: 196 },
+        { name: "Vehicles", count: 134 },
+        { name: "Cameras", count: 178 },
+        { name: "Generators", count: 92 },
+        { name: "Furniture", count: 215 },
+        { name: "Kitchen", count: 167 },
+      ],
+      listingsActive: 2100,
+      listingsInactive: 315,
+      approvedRej: { approved: 1820, rejected: 142 },
+      topListings: [
+        { name: "Canon DSLR Kit", bookings: 86, revenue: 142000 },
+        { name: "Honda Generator 5kW", bookings: 74, revenue: 128000 },
+        { name: "JBL Pro Speakers", bookings: 61, revenue: 98000 },
+        { name: "Wedding Chairs (×100)", bookings: 58, revenue: 84000 },
+        { name: "Bosch Power Drill", bookings: 52, revenue: 41000 },
+      ],
+    };
+  }
+
+  function renderSuperAnalytics() {
+    if (!inSuper || page !== "analytics.html") return;
+    var main = document.querySelector("main");
+    if (!main) return;
+    // Replace existing analytics content body (keep the heading block at the top)
+    var heading = main.querySelector(".mb-4");
+    main.innerHTML = "";
+    if (heading) main.appendChild(heading);
+
+    injectAnalyticsDarkCSS();
+
+    var d = seedAnalyticsData();
+    var fmtN = function (n) {
+      return Number(n || 0).toLocaleString();
+    };
+
+    // Summary cards
+    var cards = document.createElement("div");
+    cards.className = "row g-3 mb-4";
+    var cardItems = [
+      {
+        l: "Total Users",
+        v: fmtN(d.totalUsers),
+        i: "bi-people-fill",
+        c: "primary",
+      },
+      {
+        l: "Total Owners",
+        v: fmtN(d.owners + d.both),
+        i: "bi-shop",
+        c: "success",
+      },
+      {
+        l: "Total Renters",
+        v: fmtN(d.renters + d.both),
+        i: "bi-bag-check",
+        c: "info",
+      },
+      {
+        l: "Total Listings",
+        v: fmtN(d.totalListings),
+        i: "bi-collection",
+        c: "warning",
+      },
+      {
+        l: "Total Bookings",
+        v: fmtN(d.totalBookings),
+        i: "bi-calendar-check",
+        c: "secondary",
+      },
+      {
+        l: "Total Revenue",
+        v: fmtN(d.totalRevenue) + " ETB",
+        i: "bi-cash-stack",
+        c: "success",
+      },
+      {
+        l: "Pending Approvals",
+        v: fmtN(d.pendingApprovals),
+        i: "bi-hourglass-split",
+        c: "danger",
+      },
+      {
+        l: "Unread Messages",
+        v: fmtN(d.unreadMessages),
+        i: "bi-envelope-fill",
+        c: "primary",
+      },
+    ];
+    cards.innerHTML = cardItems
+      .map(function (x) {
+        return (
+          '<div class="col-sm-6 col-xl-3"><div class="cw-card p-3">' +
+          '<div class="d-flex align-items-center justify-content-between">' +
+          '<span class="text-muted small">' +
+          x.l +
+          "</span>" +
+          '<i class="bi ' +
+          x.i +
+          " text-" +
+          x.c +
+          '"></i></div>' +
+          '<h3 class="mb-0 mt-2">' +
+          x.v +
+          "</h3></div></div>"
+        );
+      })
+      .join("");
+    main.appendChild(cards);
+
+    // Chart grid
+    var grid = document.createElement("div");
+    grid.className = "cw-sa-grid mb-4";
+    var charts = [
+      { id: "chTotalUsers", title: "Total Users Growth" },
+      { id: "chNewUsers", title: "New Users Per Month" },
+      { id: "chUserRoles", title: "Owners vs Renters vs Both" },
+      { id: "chAdminUsers", title: "Admins vs Normal Users" },
+      { id: "chListingsCat", title: "Listings by Category" },
+      { id: "chActiveListings", title: "Active vs Inactive Listings" },
+      { id: "chBookings", title: "Monthly Bookings" },
+      { id: "chRevenue", title: "Revenue Trends (ETB, ×1k)" },
+      { id: "chAdRevenue", title: "Featured Advertisement Revenue (ETB, ×1k)" },
+      { id: "chApproved", title: "Approved vs Rejected Listings" },
+      { id: "chPopularCats", title: "Most Popular Categories" },
+      { id: "chMessages", title: "Contact Messages Received" },
+    ];
+    grid.innerHTML = charts
+      .map(function (c) {
+        return (
+          '<div class="cw-card p-3"><h6 class="mb-3">' +
+          c.title +
+          '</h6><div class="cw-sa-chart"><canvas id="' +
+          c.id +
+          '"></canvas></div></div>'
+        );
+      })
+      .join("");
+    main.appendChild(grid);
+
+    // Top performing listings table
+    var top = document.createElement("div");
+    top.className = "cw-card p-4 mb-4";
+    top.innerHTML =
+      '<h5 class="mb-3">Top Performing Listings</h5>' +
+      '<div class="table-responsive"><table class="table align-middle mb-0"><thead><tr>' +
+      '<th>#</th><th>Listing</th><th>Bookings</th><th class="text-end">Revenue</th>' +
+      "</tr></thead><tbody>" +
+      d.topListings
+        .map(function (t, i) {
+          return (
+            "<tr><td>" +
+            (i + 1) +
+            "</td><td>" +
+            esc(t.name) +
+            "</td><td>" +
+            fmtN(t.bookings) +
+            "</td>" +
+            '<td class="text-end">' +
+            fmtN(t.revenue) +
+            " ETB</td></tr>"
+          );
+        })
+        .join("") +
+      "</tbody></table></div>";
+    main.appendChild(top);
+
+    loadScript(
+      "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js",
+    )
+      .then(function () {
+        if (typeof Chart === "undefined") return;
+        var isDark =
+          document.documentElement.getAttribute("data-theme") === "dark";
+        var tick = isDark ? "#cbd5e1" : "#475569";
+        var grid = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+        Chart.defaults.color = tick;
+        Chart.defaults.borderColor = grid;
+        Chart.defaults.plugins.legend.labels.color = tick;
+        var palette = [
+          "#0d6efd",
+          "#198754",
+          "#ffc107",
+          "#dc3545",
+          "#6f42c1",
+          "#20c997",
+          "#fd7e14",
+          "#0dcaf0",
+        ];
+        function lineCfg(labels, data, label, color) {
+          return {
+            type: "line",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: label,
+                  data: data,
+                  borderColor: color,
+                  backgroundColor: color + "33",
+                  tension: 0.35,
+                  fill: true,
+                  pointRadius: 3,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+            },
+          };
+        }
+        function barCfg(labels, data, label, color) {
+          return {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [{ label: label, data: data, backgroundColor: color }],
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+            },
+          };
+        }
+        function doughnutCfg(labels, data, colors) {
+          return {
+            type: "doughnut",
+            data: {
+              labels: labels,
+              datasets: [
+                { data: data, backgroundColor: colors, borderWidth: 0 },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: { legend: { position: "bottom" } },
+              cutout: "60%",
+            },
+          };
+        }
+        new Chart(
+          document.getElementById("chTotalUsers"),
+          lineCfg(d.months, d.growth, "Users", palette[0]),
+        );
+        new Chart(
+          document.getElementById("chNewUsers"),
+          barCfg(d.months, d.newRegs, "New", palette[1]),
+        );
+        new Chart(
+          document.getElementById("chUserRoles"),
+          doughnutCfg(
+            ["Owners", "Renters", "Both"],
+            [d.owners, d.renters, d.both],
+            [palette[1], palette[0], palette[4]],
+          ),
+        );
+        new Chart(
+          document.getElementById("chAdminUsers"),
+          doughnutCfg(
+            ["Normal Users", "Admins/Super Admins"],
+            [d.normals, d.admins],
+            [palette[0], palette[3]],
+          ),
+        );
+        new Chart(
+          document.getElementById("chListingsCat"),
+          barCfg(
+            d.categories.map(function (c) {
+              return c.name;
+            }),
+            d.categories.map(function (c) {
+              return c.count;
+            }),
+            "Listings",
+            palette[2],
+          ),
+        );
+        new Chart(
+          document.getElementById("chActiveListings"),
+          doughnutCfg(
+            ["Active", "Inactive"],
+            [d.listingsActive, d.listingsInactive],
+            [palette[1], palette[7]],
+          ),
+        );
+        new Chart(
+          document.getElementById("chBookings"),
+          barCfg(d.months, d.bookings, "Bookings", palette[5]),
+        );
+        new Chart(
+          document.getElementById("chRevenue"),
+          lineCfg(d.months, d.revenue, "Revenue", palette[1]),
+        );
+        new Chart(
+          document.getElementById("chAdRevenue"),
+          lineCfg(d.months, d.adRev, "Ad Revenue", palette[4]),
+        );
+        new Chart(
+          document.getElementById("chApproved"),
+          doughnutCfg(
+            ["Approved", "Rejected"],
+            [d.approvedRej.approved, d.approvedRej.rejected],
+            [palette[1], palette[3]],
+          ),
+        );
+        new Chart(
+          document.getElementById("chPopularCats"),
+          barCfg(
+            d.categories
+              .slice()
+              .sort(function (a, b) {
+                return b.count - a.count;
+              })
+              .slice(0, 5)
+              .map(function (c) {
+                return c.name;
+              }),
+            d.categories
+              .slice()
+              .sort(function (a, b) {
+                return b.count - a.count;
+              })
+              .slice(0, 5)
+              .map(function (c) {
+                return c.count;
+              }),
+            "Top",
+            palette[6],
+          ),
+        );
+        // Synthesize message volume from stored + baseline
+        var msgVol = [
+          4,
+          6,
+          5,
+          8,
+          9,
+          10,
+          12,
+          14,
+          11,
+          13,
+          15,
+          loadMessages().length || 16,
+        ];
+        new Chart(
+          document.getElementById("chMessages"),
+          barCfg(d.months, msgVol, "Messages", palette[0]),
+        );
+      })
+      .catch(function () {
+        var warn = document.createElement("div");
+        warn.className = "alert alert-warning";
+        warn.textContent =
+          "Charts library failed to load. Please check your internet connection.";
+        main.appendChild(warn);
+      });
+  }
+
+  /* =================================================================
+     boot
+     ================================================================= */
+  whenReady(function () {
+    try {
+      buildHeroSlider();
+    } catch (e) {
+      console.warn("hero slider", e);
+    }
+    try {
+      wireContactForm();
+    } catch (e) {
+      console.warn("contact form", e);
+    }
+    // Sidebar links — render after a tick so v11/v12 sidebars finish injecting
+    setTimeout(function () {
+      try {
+        injectMessagesSidebarLinks();
+      } catch (e) {
+        console.warn("msg sidebar", e);
+      }
+    }, 50);
+    try {
+      renderMessagesPage();
+    } catch (e) {
+      console.warn("messages page", e);
+    }
+    try {
+      renderSuperAnalytics();
+    } catch (e) {
+      console.warn("super analytics", e);
+    }
+  });
+})();
