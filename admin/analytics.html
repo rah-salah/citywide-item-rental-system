@@ -9,23 +9,75 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../style.css" />
 </head>
-<body data-cw-guard="admin">
+<body data-cw-guard="admin" data-analytics-role="admin">
   <nav class="navbar navbar-expand-lg cw-navbar sticky-top">
     <div class="container">
       <a class="navbar-brand cw-brand" href="index.html"><img src="../logo-header.svg" alt="Admin" class="cw-logo-header" /> <span class="badge bg-danger ms-2">ADMIN</span></a>
-      <div class="ms-auto"><a href="login.html" class="btn btn-sm btn-outline-secondary"><i class="bi bi-box-arrow-right"></i> Sign out</a></div>
+      <div class="ms-auto"><a href="../logout.html" class="btn btn-sm btn-outline-secondary"><i class="bi bi-box-arrow-right"></i> Sign out</a></div>
     </div>
   </nav>
   <div class="container-fluid"><div class="row">
     <aside class="col-lg-3 col-xl-2 cw-sidebar" data-cw-admin-sidebar data-active="analytics"></aside>
-    <main class="col-lg-9 col-xl-10 py-4 px-4">
-      <div class="mb-4"><h2 class="mb-1">Platform analytics</h2><p class="text-muted mb-0">Admin-only area · not visible to regular users.</p></div>
-      <div class="row g-3">
-       <div class="col-md-6"><div class="cw-card p-3"><h6>Bookings / week</h6><div class="progress mt-2" style="height:10px;"><div class="progress-bar bg-brand" style="width:74%;"></div></div><p class="small text-muted mt-2 mb-0">+12% vs last week</p></div></div>
-       <div class="col-md-6"><div class="cw-card p-3"><h6>New signups / week</h6><div class="progress mt-2" style="height:10px;"><div class="progress-bar bg-success" style="width:58%;"></div></div><p class="small text-muted mt-2 mb-0">+5%</p></div></div>
-     </div>
+    <main class="col-lg-9 col-xl-10 py-4 px-4" id="cwAnalyticsRoot">
+      <div class="mb-4">
+        <h2 class="mb-1">Admin analytics</h2>
+        <p class="text-muted mb-0">Moderation, approvals and engagement metrics.</p>
+      </div>
+
+      <!-- Date filter bar -->
+      <div class="cw-card cw-premium p-3 mb-4">
+        <div class="row g-2 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label small mb-1">Preset</label>
+            <select id="flPreset" class="form-select form-select-sm">
+              <option value="today">Today</option>
+              <option value="all" selected>All time</option>
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="this-month">This month</option>
+              <option value="last-month">Last month</option>
+              <option value="this-year">This year</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small mb-1">From date</label>
+            <input type="date" id="flFrom" class="form-control form-control-sm">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small mb-1">To date</label>
+            <input type="date" id="flTo" class="form-control form-control-sm">
+          </div>
+          <div class="col-md-3 d-flex gap-2">
+            <button id="flApply" class="btn btn-sm btn-brand flex-fill"><i class="bi bi-funnel me-1"></i>Apply</button>
+            <button id="flReset" class="btn btn-sm btn-outline-secondary flex-fill"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary cards -->
+      <div class="row g-3 mb-4" id="cwSummaryCards"></div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="cw-card cw-chart-card p-3">
+            <h5 class="mb-3">Platform Activity — Users, Listings, Pending, Bookings</h5>
+            <div style="height:340px"><canvas id="growthChart"></canvas></div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="cw-card cw-chart-card p-3">
+            <h5 class="mb-3">Listing Performance — Active, Inactive, Approved, Rejected</h5>
+            <div style="height:340px"><canvas id="revenueChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div></div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="../app.js"></script>
-</body></html>
+  <script src="../analytics.js"></script>
+</body>
+</html>
