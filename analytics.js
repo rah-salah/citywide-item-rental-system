@@ -10,7 +10,7 @@
   var ROLE  = document.body.getAttribute("data-analytics-role") || "admin";
   var STATE = { users:[], listings:[], bookings:[], tx:[], ads:[], msgs:[], cats:[] };
   // Active filter range as ISO YYYY-MM-DD strings (inclusive)
-  var FILTER = { from:null, to:null };
+  var FILTER = { from: null, to: null };
   var charts = {};
 
   // ---------- date helpers ----------
