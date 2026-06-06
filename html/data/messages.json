@@ -1,0 +1,6 @@
+[
+  { "id": 8001, "from": "Hanna Bekele", "email": "hanna@example.com", "subject": "Listing question", "date": "2026-06-02", "read": false },
+  { "id": 8002, "from": "Samuel A.", "email": "sam@example.com", "subject": "Refund request", "date": "2026-06-03", "read": false },
+  { "id": 8003, "from": "Lily T.", "email": "lily@example.com", "subject": "Partnership", "date": "2026-05-28", "read": true },
+  { "id": 8004, "from": "Yonas K.", "email": "yonas@example.com", "subject": "Bug report", "date": "2026-05-30", "read": false }
+]

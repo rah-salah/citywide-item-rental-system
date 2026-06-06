@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citywide Jigjiga — Rent Anything Nearby</title>
+  <meta name="description" content="Jigjiga's trusted marketplace for renting and sharing items locally." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/premium.css" />
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg cw-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand cw-brand" href="home.html"><img src="logo-header.svg" alt="Citywide Jigjiga" class="cw-logo-header" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0"><li class="nav-item"><a class="nav-link active" href="home.html">Home</a></li><li class="nav-item"><a class="nav-link" href="listings.html">Browse</a></li><li class="nav-item"><a class="nav-link" href="add-item.html">List Item</a></li><li class="nav-item"><a class="nav-link" href="about.html">About</a></li><li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li></ul>
+        <div class="d-flex ms-lg-auto align-items-lg-center"><a class="btn cw-signin-btn ms-2" href="login.html">Sign In</a></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Modern hero with video background (original two-column layout preserved) -->
+  <section class="cw-hero cw-hero-modern">
+    <video class="cw-hero-bg-video" autoplay muted loop playsinline preload="auto" poster="images/event-gear.jpg">
+      <source src="images/hero-bg.mp4" type="video/mp4" />
+    </video>
+    <div class="cw-hero-overlay"></div>
+    <div class="container position-relative">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7 cw-hero-copy">
+          <span class="eyebrow mb-3"><i class="bi bi-geo-alt-fill me-1"></i> Trusted across Jigjiga · 2,400+ local listings</span>
+          <h1 class="display-3 fw-bold mt-3 cw-hero-title">Rent <span class="cw-hero-accent">Anything</span> Nearby in Jigjiga</h1>
+          <p class="lead mt-3 mb-4 cw-hero-lead">Jigjiga's trusted marketplace for renting and sharing items locally. Pay in ETB. Safe escrow on every booking.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="listings.html" class="btn btn-light btn-lg cw-hero-cta"><i class="bi bi-search me-2"></i>Browse Rentals</a>
+            <a href="add-item.html" class="btn btn-outline-light btn-lg cw-hero-cta"><i class="bi bi-plus-lg me-2"></i>List Your Item</a>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="cw-hero-search-card p-4 rounded-4 shadow-lg">
+            <h5 class="mb-3 fw-bold">Find what you need</h5>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">What do you need?</label>
+              <input type="text" class="form-control form-control-lg" placeholder="Search listings..." />
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Where in Jigjiga?</label>
+              <select class="form-select form-select-lg"><option>All areas</option><option>Suq-Hassan / Aw-Danbe</option><option>Suq-Yare</option><option>Saylada (Livestock Market)</option><option>Jajab Area</option><option>Sheikh Nur Isse</option><option>Kela (Qela)</option><option>Waraba-Sal</option><option>Jibri Area</option><option>Manahariya (Bus Station)</option><option>Duda-Hidi</option><option>Lanta-Wada</option><option>Qaryan-Dhodan</option><option>Ayar-Daga (Airport Zone)</option></select>
+            </div>
+            <a href="listings.html" class="btn btn-brand btn-lg w-100"><i class="bi bi-search me-2"></i>Search</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured ads slim carousel: rendered by app.js -->
+  <section class="cw-featured-strip" id="cwHeroCarousel" aria-label="Featured ads"></section>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <p class="section-eyebrow">Popular categories</p>
+        <h2>Browse by category</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-6 col-md-4 col-lg-3"><a href="listings.html" class="text-decoration-none text-reset"><div class="cw-category-card"><img class="cw-category-img" src="images/electronics.jpg" alt="Electronics" loading="lazy" /><div class="cw-category-body"><h6 class="mb-1">Electronics</h6><p class="text-muted small mb-0">412 listings</p></div></div></a></div>
+        <div class="col-6 col-md-4 col-lg-3"><a href="listings.html" class="text-decoration-none text-reset"><div class="cw-category-card"><img class="cw-category-img" src="images/power-tools.jpg" alt="Power Tools" loading="lazy" /><div class="cw-category-body"><h6 class="mb-1">Power Tools</h6><p class="text-muted small mb-0">287 listings</p></div></div></a></div>
+        <div class="col-6 col-md-4 col-lg-3"><a href="listings.html" class="text-decoration-none text-reset"><div class="cw-category-card"><img class="cw-category-img" src="images/event-gear.jpg" alt="Event Gear" loading="lazy" /><div class="cw-category-body"><h6 class="mb-1">Event Gear</h6><p class="text-muted small mb-0">196 listings</p></div></div></a></div>
+        <div class="col-6 col-md-4 col-lg-3"><a href="listings.html" class="text-decoration-none text-reset"><div class="cw-category-card"><img class="cw-category-img" src="images/vehicles.jpg" alt="Vehicles" loading="lazy" /><div class="cw-category-body"><h6 class="mb-1">Vehicles</h6><p class="text-muted small mb-0">134 listings</p></div></div></a></div>
+        <div class="col-6 col-md-4 col-lg-3"><a href="listings.html" class="text-decoration-none text-reset"><div class="cw-category-card"><img class="cw-category-img" src="images/cameras.jpg" alt="Cameras" loading="lazy" /><div class="cw-category-body"><h6 class="mb-1">Cameras</h6><p class="text-muted small mb-0">178 listings</p></div></div></a></div>
+        <div class="col-6 col-md-4 col-lg-3"><a href="listings.html" class="text-decoration-none text-reset"><div class="cw-category-card"><img class="cw-category-img" src="images/generators.jpg" alt="Generators" loading="lazy" /><div class="cw-category-body"><h6 class="mb-1">Generators</h6><p class="text-muted small mb-0">92 listings</p></div></div></a></div>
+        <div class="col-6 col-md-4 col-lg-3"><a href="listings.html" class="text-decoration-none text-reset"><div class="cw-category-card"><img class="cw-category-img" src="images/furniture.jpg" alt="Furniture" loading="lazy" /><div class="cw-category-body"><h6 class="mb-1">Furniture</h6><p class="text-muted small mb-0">215 listings</p></div></div></a></div>
+        <div class="col-6 col-md-4 col-lg-3"><a href="listings.html" class="text-decoration-none text-reset"><div class="cw-category-card"><img class="cw-category-img" src="images/kitchen.jpg" alt="Kitchen" loading="lazy" /><div class="cw-category-body"><h6 class="mb-1">Kitchen</h6><p class="text-muted small mb-0">167 listings</p></div></div></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured listings -->
+  <section class="py-5 bg-white border-top">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+        <div>
+          <p class="section-eyebrow mb-1">Popular listings</p>
+          <h2 class="mb-0">Trending in Jigjiga right now</h2>
+        </div>
+        <a href="listings.html" class="btn btn-outline-brand">View all</a>
+      </div>
+      <div class="row g-4">
+        <div class="col-sm-6 col-lg-3"><div class="cw-card cw-feature-card"><div class="cw-feature-img-wrap"><img src="images/cameras.jpg" alt="Canon DSLR Camera" loading="lazy" /></div><div class="cw-feature-body"><h6 class="mb-1">Canon DSLR Camera</h6><p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> Suq-Yare</p><div class="mt-auto d-flex justify-content-between align-items-center"><span class="cw-feature-price">450 ETB / day</span><span class="small text-warning"><i class="bi bi-star-fill"></i> 4.9</span></div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="cw-card cw-feature-card"><div class="cw-feature-img-wrap"><img src="images/laptop.jpg" alt="MacBook Pro Laptop" loading="lazy" /></div><div class="cw-feature-body"><h6 class="mb-1">MacBook Pro Laptop</h6><p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> Suq-Hassan / Aw-Danbe</p><div class="mt-auto d-flex justify-content-between align-items-center"><span class="cw-feature-price">800 ETB / day</span><span class="small text-warning"><i class="bi bi-star-fill"></i> 5.0</span></div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="cw-card cw-feature-card"><div class="cw-feature-img-wrap"><img src="images/speaker.jpg" alt="JBL Speaker System" loading="lazy" /></div><div class="cw-feature-body"><h6 class="mb-1">JBL Speaker System</h6><p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> Manahariya (Bus Station)</p><div class="mt-auto d-flex justify-content-between align-items-center"><span class="cw-feature-price">600 ETB / day</span><span class="small text-warning"><i class="bi bi-star-fill"></i> 4.8</span></div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="cw-card cw-feature-card"><div class="cw-feature-img-wrap"><img src="images/generators.jpg" alt="Honda Generator 5kW" loading="lazy" /></div><div class="cw-feature-body"><h6 class="mb-1">Honda Generator 5kW</h6><p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> Saylada (Livestock Market)</p><div class="mt-auto d-flex justify-content-between align-items-center"><span class="cw-feature-price">1,200 ETB / day</span><span class="small text-warning"><i class="bi bi-star-fill"></i> 4.9</span></div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Available today / Recently added -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-6">
+          <p class="section-eyebrow mb-1">Available today</p>
+          <h3 class="mb-4">Ready for pickup now</h3>
+          <div class="row g-3">
+            <div class="col-sm-6"><div class="cw-card cw-feature-card"><div class="cw-feature-img-wrap"><img src="images/projector.jpg" alt="HD Projector" loading="lazy" /></div><div class="cw-feature-body"><h6 class="mb-1">HD Projector</h6><p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> Jigjiga Central</p><div class="mt-auto"><span class="cw-feature-price">500 ETB / day</span></div></div></div></div>
+            <div class="col-sm-6"><div class="cw-card cw-feature-card"><div class="cw-feature-img-wrap"><img src="images/power-tools.jpg" alt="Power Drill Set" loading="lazy" /></div><div class="cw-feature-body"><h6 class="mb-1">Power Drill Set</h6><p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> Sheikh Nur Isse</p><div class="mt-auto"><span class="cw-feature-price">250 ETB / day</span></div></div></div></div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <p class="section-eyebrow mb-1">Recently added</p>
+          <h3 class="mb-4">Fresh on Citywide</h3>
+          <div class="row g-3">
+            <div class="col-sm-6"><div class="cw-card cw-feature-card"><div class="cw-feature-img-wrap"><img src="images/tables-chairs.jpg" alt="Folding Tables & Chairs" loading="lazy" /></div><div class="cw-feature-body"><h6 class="mb-1">Tables & Chairs Set</h6><p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> Xaafada 03 (Kebele 03)</p><div class="mt-auto"><span class="cw-feature-price">350 ETB / day</span></div></div></div></div>
+            <div class="col-sm-6"><div class="cw-card cw-feature-card"><div class="cw-feature-img-wrap"><img src="images/grinder.jpg" alt="Angle Grinder" loading="lazy" /></div><div class="cw-feature-body"><h6 class="mb-1">Angle Grinder</h6><p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> Jajab Area</p><div class="mt-auto"><span class="cw-feature-price">200 ETB / day</span></div></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-white border-top border-bottom">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <p class="section-eyebrow">How it works</p>
+          <h2 class="mb-4">Renting in Jigjiga, made simple</h2>
+          <div class="d-flex gap-3 mb-3">
+            <div class="cw-stat-icon bg-brand-soft text-brand flex-shrink-0"><i class="bi bi-search"></i></div>
+            <div><h6 class="mb-1">1. Search nearby</h6><p class="text-muted mb-0">Filter by area, price, and availability across Jigjiga.</p></div>
+          </div>
+          <div class="d-flex gap-3 mb-3">
+            <div class="cw-stat-icon bg-brand-soft text-brand flex-shrink-0"><i class="bi bi-shield-check"></i></div>
+            <div><h6 class="mb-1">2. Book safely</h6><p class="text-muted mb-0">Payment held in escrow until handoff is complete.</p></div>
+          </div>
+          <div class="d-flex gap-3">
+            <div class="cw-stat-icon bg-brand-soft text-brand flex-shrink-0"><i class="bi bi-bag-check"></i></div>
+            <div><h6 class="mb-1">3. Pick up & enjoy</h6><p class="text-muted mb-0">Meet your verified neighbour, collect the item, return on time.</p></div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="row g-3">
+            <div class="col-6"><div class="cw-card p-4 text-center"><h3 class="text-brand mb-1">2,400+</h3><p class="text-muted small mb-0">Active listings</p></div></div>
+            <div class="col-6"><div class="cw-card p-4 text-center"><h3 class="text-brand mb-1">8,900+</h3><p class="text-muted small mb-0">Verified members</p></div></div>
+            <div class="col-6"><div class="cw-card p-4 text-center"><h3 class="text-brand mb-1">14</h3><p class="text-muted small mb-0">Jigjiga neighbourhoods</p></div></div>
+            <div class="col-6"><div class="cw-card p-4 text-center"><h3 class="text-brand mb-1">4.9★</h3><p class="text-muted small mb-0">Average rating</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="cw-footer mt-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <img src="logo-footer.svg" alt="Citywide Jigjiga" class="cw-logo-footer mb-2" />
+          <p class="small mb-0">Jigjiga's trusted marketplace for renting and sharing items locally.</p>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="text-white">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="listings.html">Browse</a></li>
+            <li><a href="add-item.html">List Item</a></li>
+            <li><a href="about.html">About</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="text-white">Account</h6>
+          <ul class="list-unstyled small">
+            <li><a href="login.html">Sign In</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-white">Contact</h6>
+          <p class="small mb-1"><i class="bi bi-geo-alt"></i> Jigjiga Central, Somali Region, Ethiopia</p>
+          <p class="small mb-1"><i class="bi bi-envelope"></i> hello@citywide-jigjiga.et</p>
+          <p class="small mb-0"><i class="bi bi-telephone"></i> +251 900 000 000</p>
+        </div>
+      </div>
+      <hr class="border-secondary my-4" />
+      <p class="small text-center mb-0">© 2026 Citywide Jigjiga. Built in Jigjiga, for Jigjiga.</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/config.js"></script>
+<script src="../js/chatbot.js" defer></script>
+<script src="../js/mobile-nav.js" defer></script>
+<script src="../js/ui-enhancements.js" defer></script>
+</body>
+</html>

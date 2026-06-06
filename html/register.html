@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — Citywide Jigjiga</title>
+  <meta name="description" content="Join Citywide Jigjiga." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/premium.css" />
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg cw-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand cw-brand" href="home.html"><img src="logo-header.svg" alt="Citywide Jigjiga" class="cw-logo-header" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0"><li class="nav-item"><a class="nav-link" href="home.html">Home</a></li><li class="nav-item"><a class="nav-link" href="listings.html">Browse</a></li><li class="nav-item"><a class="nav-link" href="add-item.html">List Item</a></li><li class="nav-item"><a class="nav-link" href="about.html">About</a></li><li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li></ul>
+        <div class="d-flex ms-lg-auto align-items-lg-center"><a class="btn cw-signin-btn ms-2" href="login.html">Sign In</a></div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="py-5">
+    <div class="container" style="max-width:560px;">
+      <div class="text-center mb-4">
+        <p class="section-eyebrow">Sign up free</p>
+        <h2>Create your Citywide account</h2>
+        <p class="text-muted">Free to join. Rent or lend across Jigjiga.</p>
+      </div>
+      <div class="cw-card p-4 p-md-5">
+        <form data-cw-register autocomplete="on">
+          <div class="mb-3"><label class="form-label fw-semibold" for="rgName">Full name</label><input id="rgName" type="text" name="fullName" class="form-control" placeholder="Enter your full name" autocomplete="name" required /></div>
+          <div class="mb-3"><label class="form-label fw-semibold" for="rgEmail">Email address</label><input id="rgEmail" name="email" type="email" class="form-control" placeholder="Enter your email address" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" required /></div>
+          <div class="mb-3"><label class="form-label fw-semibold" for="rgPw">Password</label><input id="rgPw" type="password" name="password" class="form-control" placeholder="Create a strong password" autocomplete="new-password" required /></div>
+          <div class="mb-3"><label class="form-label fw-semibold" for="rgPw2">Confirm password</label><input id="rgPw2" type="password" name="confirmPassword" class="form-control" placeholder="Re-enter your password" autocomplete="new-password" required /></div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Account type</label>
+            <select name="accountType" class="form-select" required>
+              <option value="" disabled selected>Select account type</option>
+              <option value="renter">Renter — I want to rent items</option>
+              <option value="owner">Owner — I want to lend my items</option>
+              <option value="both">Both — Renter &amp; Owner</option>
+            </select>
+            <div class="form-text">This sets your dashboard. You can change it later in Settings.</div>
+          </div>
+          <div class="d-grid mb-3"><button class="btn btn-brand btn-lg" type="submit">Create account</button></div>
+          <p class="text-center small text-muted mb-0">Already have an account? <a href="login.html" class="text-brand fw-semibold">Sign in</a></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="cw-footer mt-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <img src="logo-footer.svg" alt="Citywide Jigjiga" class="cw-logo-footer mb-2" />
+          <p class="small mb-0">Jigjiga's trusted marketplace for renting and sharing items locally.</p>
+        </div>
+        <div class="col-6 col-md-2"><h6 class="text-white">Explore</h6><ul class="list-unstyled small"><li><a href="listings.html">Browse</a></li><li><a href="add-item.html">List Item</a></li><li><a href="about.html">About</a></li></ul></div>
+        <div class="col-6 col-md-2"><h6 class="text-white">Account</h6><ul class="list-unstyled small"><li><a href="login.html">Sign In</a></li></ul></div>
+        <div class="col-md-4"><h6 class="text-white">Contact</h6><p class="small mb-1"><i class="bi bi-geo-alt"></i> Jigjiga Central, Somali Region, Ethiopia</p><p class="small mb-1"><i class="bi bi-envelope"></i> hello@citywide-jigjiga.et</p><p class="small mb-0"><i class="bi bi-telephone"></i> +251 900 000 000</p></div>
+      </div>
+      <hr class="border-secondary my-4" />
+      <p class="small text-center mb-0">© 2026 Citywide Jigjiga. Built in Jigjiga, for Jigjiga.</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/config.js"></script>
+<script src="../js/chatbot.js" defer></script>
+<script src="../js/mobile-nav.js" defer></script>
+<script src="../js/ui-enhancements.js" defer></script>
+</body>
+</html>
