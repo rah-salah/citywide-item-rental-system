@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Platform overview — Citywide Super Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/premium.css" />
+</head>
+<body data-cw-guard="superadmin" data-analytics-role="superadmin">
+  <nav class="navbar navbar-expand-lg cw-navbar sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand cw-brand" href="index.html"><img src="../logo-header.svg" alt="Super Admin" class="cw-logo-header" /> <span class="badge bg-dark ms-2">SUPER ADMIN</span></a>
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-outline-secondary" data-theme-toggle><i data-theme-icon class="bi bi-moon-stars-fill"></i></button>
+        <a href="../logout.html" class="btn btn-sm btn-outline-secondary"><i class="bi bi-box-arrow-right"></i> Sign out</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid"><div class="row">
+    <aside class="col-lg-3 col-xl-2 cw-sidebar" data-cw-super-sidebar data-active="overview"></aside>
+    <main class="col-lg-9 col-xl-10 py-4 px-4 px-xl-5" id="cwAnalyticsRoot">
+
+      <!-- Hero -->
+      <div class="cw-dash-hero">
+        <p class="mb-1" style="font-size:.8rem; opacity:.85; letter-spacing:.14em; text-transform:uppercase;">Enterprise · Platform Control</p>
+        <h1>Platform overview</h1>
+        <p>Revenue and platform growth across CityWide — live, filterable, executive-grade.</p>
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          <a href="analytics.html" class="btn btn-light btn-sm fw-bold"><i class="bi bi-bar-chart me-1"></i>Open analytics</a>
+        </div>
+      </div>
+
+      <!-- KPI grid (auto-rendered, role-filtered) -->
+      <div class="row g-3 mb-4" id="cwKpiGrid"></div>
+
+      <!-- Two key charts only -->
+      <div class="row g-4">
+        <div class="col-12">
+          <div class="cw-chart-card cw-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="mb-1"><i class="bi bi-cash-stack text-success me-2"></i>Revenue Trend</h5>
+                <p class="text-muted small mb-0">Total revenue across bookings &amp; ads</p>
+              </div>
+              <span class="badge bg-light text-muted">Total · Bookings · Ads</span>
+            </div>
+            <div style="height:340px"><canvas id="chartRevenue"></canvas></div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="cw-chart-card cw-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="mb-1"><i class="bi bi-graph-up-arrow text-info me-2"></i>Platform Growth</h5>
+                <p class="text-muted small mb-0">Users, listings &amp; bookings combined</p>
+              </div>
+              <span class="badge bg-light text-muted">Users · Listings · Bookings</span>
+            </div>
+            <div style="height:340px"><canvas id="chartPlatform"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Governance feed -->
+      <div class="cw-section-title mt-5">
+        <h5><span class="dot"></span> Governance &amp; activity</h5>
+        <a href="audit.html" class="small text-decoration-none">Full audit log →</a>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="cw-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="mb-0">Admin accounts</h6>
+              <a href="admins.html" class="btn btn-sm btn-brand"><i class="bi bi-person-plus me-1"></i>Add admin</a>
+            </div>
+            <div data-sa="admin-list" class="small">Loading…</div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="cw-card p-4">
+            <h6 class="mb-3">Recent activity</h6>
+            <ul class="list-unstyled small mb-0" data-sa="activity-feed"><li class="text-muted">Loading…</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <script>
+      (function(){
+        function load(){
+          Promise.all([cwData("users.json"),cwData("audit_log.json")]).then(function(r){
+            var users=r[0], log=r[1];
+            var extra=JSON.parse(localStorage.getItem("cw_users_extra")||"[]");
+            var all=users.concat(extra);
+            var admins=all.filter(function(u){return (u.role||[]).indexOf("admin")>=0 || (u.role||[]).indexOf("super_admin")>=0;});
+            document.querySelector("[data-sa=admin-list]").innerHTML=admins.map(function(a){return "<div class=\"d-flex justify-content-between border-bottom py-2\"><span><strong>"+a.name+"</strong> <span class=\"text-muted small\">("+a.email+")</span></span><span class=\"badge bg-"+(a.status==="suspended"?"secondary":"success")+"\">"+(a.status||"active")+"</span></div>";}).join("");
+            document.querySelector("[data-sa=activity-feed]").innerHTML=log.slice().reverse().slice(0,6).map(function(l){return "<li class=\"mb-2\"><i class=\"bi bi-dot text-brand\"></i><strong>"+l.actor+"</strong> "+l.action+" <em>"+l.target+"</em> <span class=\"text-muted\">· "+l.date+"</span></li>";}).join("");
+          });
+        }
+        document.addEventListener("DOMContentLoaded", load);
+      })();
+      </script>
+
+    </main>
+  </div></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="../../js/app.js"></script>
+  <script src="../../js/analytics.js"></script>
+  <script src="../../js/config.js"></script>
+  <script src="../../js/chatbot.js" defer></script>
+<script src="../../js/ui-enhancements.js" defer></script>
+</body></html>

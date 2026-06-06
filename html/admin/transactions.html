@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transactions — Citywide Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/premium.css" />
+</head>
+<body data-cw-guard="admin">
+  <nav class="navbar navbar-expand-lg cw-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand cw-brand" href="index.html"><img src="../logo-header.svg" alt="Admin" class="cw-logo-header" /> <span class="badge bg-danger ms-2">ADMIN</span></a>
+      <div class="ms-auto"><a href="login.html" class="btn btn-sm btn-outline-secondary"><i class="bi bi-box-arrow-right"></i> Sign out</a></div>
+    </div>
+  </nav>
+  <div class="container-fluid"><div class="row">
+    <aside class="col-lg-3 col-xl-2 cw-sidebar" data-cw-admin-sidebar data-active="transactions"></aside>
+    <main class="col-lg-9 col-xl-10 py-4 px-4">
+      <div class="mb-4"><h2 class="mb-1">Transactions</h2><p class="text-muted mb-0"></p></div>
+      <div class="cw-card p-0"><div class="table-responsive"><table class="table align-middle mb-0">
+       <thead class="table-light"><tr><th>TX</th><th>From</th><th>To</th><th>Amount</th><th>Status</th></tr></thead>
+       <tbody>
+         <tr><td>TX-5512</td><td>Ayan H.</td><td>Amina Y.</td><td>2,550 ETB</td><td><span class="badge bg-success">Settled</span></td></tr>
+         <tr><td>TX-5511</td><td>Mohamed A.</td><td>Said F.</td><td>1,800 ETB</td><td><span class="badge bg-warning text-dark">Escrow</span></td></tr>
+       </tbody></table></div></div>
+    </main>
+  </div></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../js/app.js"></script>
+  <script src="../../js/config.js"></script>
+<script src="../../js/chatbot.js" defer></script>
+<script src="../../js/mobile-nav.js" defer></script>
+<script src="../../js/ui-enhancements.js" defer></script>
+</body></html>

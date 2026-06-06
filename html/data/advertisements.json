@@ -1,0 +1,7 @@
+[
+  { "id": 7001, "title": "Featured: City Tours", "advertiser": "Jigjiga Tours", "amount": 1200, "date": "2026-04-12", "status": "active" },
+  { "id": 7002, "title": "Top Banner: Electronics", "advertiser": "TechHub", "amount": 2400, "date": "2026-04-25", "status": "active" },
+  { "id": 7003, "title": "Sidebar: Rentals", "advertiser": "QuickRent", "amount": 800, "date": "2026-05-03", "status": "active" },
+  { "id": 7004, "title": "Featured: Home Services", "advertiser": "FixIt Pro", "amount": 1500, "date": "2026-05-18", "status": "active" },
+  { "id": 7005, "title": "Top Banner: Cars", "advertiser": "AutoMart", "amount": 3000, "date": "2026-06-02", "status": "active" }
+]

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Bookings — Citywide Jigjiga</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/premium.css" />
+</head>
+<body data-cw-guard="user">
+  <nav class="navbar navbar-expand-lg cw-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand cw-brand" href="home.html"><img src="logo-header.svg" alt="Citywide Jigjiga" class="cw-logo-header" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0"><li class="nav-item"><a class="nav-link" href="home.html">Home</a></li><li class="nav-item"><a class="nav-link" href="listings.html">Browse</a></li><li class="nav-item"><a class="nav-link" href="add-item.html">List Item</a></li><li class="nav-item"><a class="nav-link" href="about.html">About</a></li><li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li></ul>
+        <div class="dropdown ms-lg-auto"><a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark" data-bs-toggle="dropdown"><div class="cw-avatar-sm" data-user-initial>G</div></a><ul class="dropdown-menu dropdown-menu-end shadow-sm"><li><a class="dropdown-item" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li><li><a class="dropdown-item" href="logout.html"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li></ul></div>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid"><div class="row">
+    <aside class="col-lg-3 col-xl-2 cw-sidebar" data-cw-sidebar data-active="my-bookings"></aside>
+    <main class="col-lg-9 col-xl-10 py-4 px-4">
+      <div class="mb-4"><h2 class="mb-1">My Bookings</h2><p class="text-muted mb-0">Items you are currently renting from other people.</p></div>
+      <div class="cw-card p-0"><div class="table-responsive"><table class="table align-middle mb-0">
+      <thead class="table-light"><tr><th>Booking</th><th>Item</th><th>Owner</th><th>Return by</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="fw-semibold">RB-2031</td><td>Cordless Drill</td><td>Said Farah</td><td>2026-06-05</td><td><span class="badge bg-primary">Active</span></td><td><a href="#" class="btn btn-sm btn-outline-brand">Track</a></td></tr>
+        <tr><td class="fw-semibold">RB-2030</td><td>Projector</td><td>Layla Omar</td><td>2026-06-07</td><td><span class="badge bg-primary">Active</span></td><td><a href="#" class="btn btn-sm btn-outline-brand">Track</a></td></tr>
+        <tr><td class="fw-semibold">RB-2029</td><td>Tent ×2</td><td>Yusuf Ali</td><td>2026-05-20</td><td><span class="badge bg-warning text-dark">Pending</span></td><td><a href="#" class="btn btn-sm btn-outline-brand">View</a></td></tr>
+      </tbody></table></div></div>
+    </main>
+  </div></div>
+  <footer class="cw-footer mt-5"><div class="container"><p class="small text-center mb-0">© 2026 Citywide Jigjiga.</p></div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/config.js"></script>
+<script src="../js/chatbot.js" defer></script>
+<script src="../js/mobile-nav.js" defer></script>
+<script src="../js/ui-enhancements.js" defer></script>
+</body></html>
