@@ -1,0 +1,5 @@
+body[data-cw-guard="user"] [data-active="my-listings"] ~ main .cw-card,
+body[data-cw-guard="user"] [data-active="bookings"] ~ main .cw-card,
+body[data-cw-guard="user"] [data-active="earnings"] ~ main .cw-card {
+  border-radius: var(--cw-dashboard-radius);
+}

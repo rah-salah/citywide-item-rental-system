@@ -1,0 +1,7 @@
+@media (max-width: 767px) {
+  .cw-card,
+  .cw-review-card,
+  .cw-admin-topbar {
+    max-width: 100%;
+  }
+}
