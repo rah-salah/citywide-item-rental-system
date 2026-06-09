@@ -17,19 +17,61 @@
   function setupTopNav(){
     var navbar = document.querySelector(".cw-navbar");
     if (!navbar) return;
-    var isAdminArea = !!document.body.dataset.cwGuard;
+    var guard = document.body.dataset.cwGuard || "";
+    var isAdminArea = guard === "admin" || guard === "superadmin";
 
-    if (!isAdminArea) {
-      // Remove the dropdown menu (links + sign-in collapse) on public pages.
-      var toggler = navbar.querySelector(".navbar-toggler");
-      if (toggler) toggler.remove();
+    // Admin and Super Admin pages keep the sidebar for account actions. The
+    // top bar is only global site navigation, with no role badge or sign-out.
+    var container = navbar.querySelector(".container, .container-fluid");
+    if (!container) return;
+    if (isAdminArea) {
+      container.innerHTML =
+        '<a class="navbar-brand cw-brand cw-brand-text" href="../home.html">CityWide</a>'+
+        '<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">'+
+          '<span class="navbar-toggler-icon"></span>'+
+        '</button>'+
+        '<div class="collapse navbar-collapse" id="mainNav">'+
+          '<ul class="navbar-nav mx-auto mb-2 mb-lg-0">'+
+            '<li class="nav-item"><a class="nav-link" href="../home.html">Home</a></li>'+
+            '<li class="nav-item"><a class="nav-link" href="../listings.html">Browse</a></li>'+
+            '<li class="nav-item"><a class="nav-link" href="../about.html">About</a></li>'+
+            '<li class="nav-item"><a class="nav-link" href="../contact.html">Contact</a></li>'+
+          '</ul>'+
+          '<div class="d-flex ms-lg-auto align-items-lg-center gap-2 cw-desktop-auth">'+
+            '<div class="btn-group btn-group-sm cw-lang-switch" role="group" aria-label="Language">'+
+              '<button type="button" class="btn btn-outline-secondary active" data-lang-btn="en">EN</button>'+
+              '<button type="button" class="btn btn-outline-secondary" data-lang-btn="so">SO</button>'+
+            '</div>'+
+            '<a class="btn cw-signin-btn" href="../login.html">Sign In</a>'+
+          '</div>'+
+        '</div>';
+    } else {
       var collapse = navbar.querySelector("#mainNav, .navbar-collapse");
-      if (collapse) collapse.remove();
+      if (collapse && !collapse.querySelector(".cw-desktop-auth")) {
+        var existingSignIn = collapse.querySelector(".cw-signin-btn");
+        var oldSignInWrap = existingSignIn ? existingSignIn.parentElement : null;
+        var tools = document.createElement("div");
+        tools.className = "d-flex ms-lg-auto align-items-lg-center gap-2 cw-desktop-auth";
+        tools.innerHTML =
+          '<div class="btn-group btn-group-sm cw-lang-switch" role="group" aria-label="Language">'+
+            '<button type="button" class="btn btn-outline-secondary active" data-lang-btn="en">EN</button>'+
+            '<button type="button" class="btn btn-outline-secondary" data-lang-btn="so">SO</button>'+
+          '</div>'+
+          '<button type="button" class="btn btn-sm btn-outline-secondary cw-desktop-theme" data-theme-toggle aria-label="Toggle dark mode">'+
+            '<i data-theme-icon class="bi bi-moon-stars-fill"></i>'+
+          '</button>';
+        if (existingSignIn) {
+          tools.appendChild(existingSignIn);
+          if (oldSignInWrap && !oldSignInWrap.children.length) oldSignInWrap.remove();
+        } else {
+          tools.insertAdjacentHTML("beforeend", '<a class="btn cw-signin-btn" href="login.html">Sign In</a>');
+        }
+        collapse.appendChild(tools);
+      }
     }
 
     // Build / find right-side action group
-    var container = navbar.querySelector(".container, .container-fluid");
-    if (!container) return;
+    container = navbar.querySelector(".container, .container-fluid");
     var actions = container.querySelector(".cw-nav-actions");
     if (!actions) {
       actions = document.createElement("div");
@@ -48,7 +90,10 @@
       '</button>'+
       '<ul class="dropdown-menu dropdown-menu-end cw-more-dropdown shadow">'+
         '<li class="dropdown-header small text-uppercase">Language</li>'+
-        '<li><button class="dropdown-item active" type="button" data-cw-lang="en"><i class="bi bi-globe2 me-2"></i>English (EN)</button></li>'+
+        '<li><button class="dropdown-item active" type="button" data-cw-lang="en" data-lang-btn="en"><i class="bi bi-globe2 me-2"></i>English (EN)</button></li>'+
+        '<li><button class="dropdown-item" type="button" data-cw-lang="so" data-lang-btn="so"><i class="bi bi-translate me-2"></i>Somali (SO)</button></li>'+
+        '<li><hr class="dropdown-divider"></li>'+
+        '<li><a class="dropdown-item" href="'+(isAdminArea ? "../login.html" : "login.html")+'"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</a></li>'+
         '<li><hr class="dropdown-divider"></li>'+
         '<li class="dropdown-header small text-uppercase">Appearance</li>'+
         '<li><button class="dropdown-item" type="button" data-cw-more-theme>'+
@@ -57,6 +102,17 @@
         '</button></li>'+
       '</ul>';
     actions.appendChild(wrap);
+
+    wrap.querySelectorAll("[data-cw-lang]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var lang = btn.getAttribute("data-cw-lang");
+        if (window.cwSetLanguage) window.cwSetLanguage(lang);
+        else {
+          try { localStorage.setItem("cw_lang", lang); } catch(e){}
+          document.documentElement.setAttribute("lang", lang === "so" ? "so" : "en");
+        }
+      });
+    });
 
     // Theme toggle inside menu — delegates to existing theme system if available.
     function syncThemeLabel(){
@@ -80,6 +136,19 @@
         try { localStorage.setItem("cw_theme", dark ? "light" : "dark"); } catch(e){}
       }
       setTimeout(syncThemeLabel, 30);
+    });
+
+    document.querySelectorAll(".cw-desktop-theme[data-theme-toggle]").forEach(function(btn){
+      if (btn.dataset.cwThemeBound) return;
+      btn.dataset.cwThemeBound = "1";
+      btn.addEventListener("click", function(){
+        var html = document.documentElement;
+        var dark = html.getAttribute("data-theme") === "dark";
+        html.setAttribute("data-theme", dark ? "light" : "dark");
+        html.classList.toggle("dark", !dark);
+        try { localStorage.setItem("cw_theme", dark ? "light" : "dark"); } catch(e){}
+        setTimeout(syncThemeLabel, 30);
+      });
     });
 
     // Hide redundant standalone theme toggle in admin/superadmin top bars

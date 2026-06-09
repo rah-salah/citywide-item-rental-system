@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Citywide Jigjiga</title>
+  <meta name="description" content="Manage your Citywide Jigjiga profile." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+</head>
+<body data-cw-guard="profile">
+
+  <nav class="navbar navbar-expand-lg cw-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand cw-brand" href="home.html"><img src="../assets/logos/logo-header.svg" alt="Citywide Jigjiga" class="cw-logo-header" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0"><li class="nav-item"><a class="nav-link" href="home.html">Home</a></li><li class="nav-item"><a class="nav-link" href="listings.html">Browse</a></li><li class="nav-item"><a class="nav-link" href="add-item.html">List Item</a></li><li class="nav-item"><a class="nav-link" href="about.html">About</a></li><li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li></ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <aside class="col-lg-3 col-xl-2 cw-sidebar" data-cw-sidebar data-active="profile"></aside>
+      <main class="col-lg-9 col-xl-10 py-4 px-4">
+
+        <div class="mb-4"><h2 class="mb-1">Profile</h2><p class="text-muted mb-0">Update your personal information.</p></div>
+        <div class="row g-4">
+          <div class="col-lg-4">
+            <div class="cw-card p-4 text-center">
+              <img data-cw-avatar-preview src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96'><rect width='100%' height='100%' fill='%23e7eefc'/></svg>" alt="Avatar preview" class="rounded-circle mb-3" style="width:96px;height:96px;object-fit:cover;display:none;" />
+              <div class="cw-avatar cw-avatar-lg mx-auto mb-3" data-user-initial>G</div>
+              <h5 class="mb-1" data-user-name>User</h5>
+              <p class="text-muted small mb-3"><i class="bi bi-geo-alt"></i> <span data-user-area>Jigjiga Central</span></p>
+              <input type="file" data-cw-avatar accept="image/*" class="form-control form-control-sm" />
+              <p class="small text-muted mt-2 mb-0">Upload a clear profile picture.</p>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="cw-card p-4">
+              <h5 class="mb-3">Personal details</h5>
+              <form data-cw-profile>
+                <div class="row g-3">
+                  <div class="col-md-6"><label class="form-label fw-semibold">Full name</label><input name="fullName" class="form-control" placeholder="Enter your full name" /></div>
+                  <div class="col-md-6"><label class="form-label fw-semibold">Email address</label><input name="email" type="email" class="form-control" placeholder="Enter your email address" /></div>
+                  <div class="col-md-6"><label class="form-label fw-semibold">Phone number</label><input name="phone" type="tel" class="form-control" placeholder="Enter your phone number" /></div>
+                  <div class="col-md-6"><label class="form-label fw-semibold">Neighbourhood</label>
+                    <select name="area" class="form-select"><option selected>Suq-Hassan / Aw-Danbe</option><option>Suq-Yare</option><option>Saylada (Livestock Market)</option><option>Jajab Area</option><option>Sheikh Nur Isse</option><option>Kela (Qela)</option><option>Waraba-Sal</option><option>Jibri Area</option><option>Manahariya (Bus Station)</option><option>Duda-Hidi</option><option>Lanta-Wada</option><option>Qaryan-Dhodan</option><option>Ayar-Daga (Airport Zone)</option><option>Xaafada 01 (Kebele 01)</option><option>Xaafada 02 (Kebele 02)</option><option>Xaafada 03 (Kebele 03)</option><option>Xaafada 04 (Kebele 04)</option></select>
+                  </div>
+                  <div class="col-12"><label class="form-label fw-semibold">Address</label><input name="address" class="form-control" placeholder="Enter your full street address" /></div>
+                  <div class="col-12"><label class="form-label fw-semibold">About you</label><textarea name="bio" class="form-control" rows="3" placeholder="Tell renters a bit about yourself"></textarea></div>
+                  <div class="col-12 text-end"><button class="btn btn-brand" type="submit">Save changes</button></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <footer class="cw-footer mt-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <img src="../assets/logos/logo-footer.svg" alt="Citywide Jigjiga" class="cw-logo-footer mb-2" />
+          <p class="small mb-0">Jigjiga's trusted marketplace for renting and sharing items locally.</p>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="text-white">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="listings.html">Browse</a></li>
+            <li><a href="add-item.html">List Item</a></li>
+            <li><a href="about.html">About</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="text-white">Account</h6>
+          <ul class="list-unstyled small">
+            <li><a href="login.html">Sign In</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-white">Contact</h6>
+          <p class="small mb-1"><i class="bi bi-geo-alt"></i> Jigjiga Central, Somali Region, Ethiopia</p>
+          <p class="small mb-1"><i class="bi bi-envelope"></i> hello@citywide-jigjiga.et</p>
+          <p class="small mb-0"><i class="bi bi-telephone"></i> +251 900 000 000</p>
+        </div>
+      </div>
+      <hr class="border-secondary my-4" />
+      <p class="small text-center mb-0">© 2026 Citywide Jigjiga. Built in Jigjiga, for Jigjiga.</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/config.js"></script>
+<script src="../js/chatbot.js" defer></script>
+<script src="../js/sidebar.js" defer></script>
+<script src="../js/reviews.js" defer></script>
+  <script src="../js/rental-requests.js" defer></script>
+<script src="../js/dashboard.js" defer></script>
+
+<script src="../js/cw-fixes.js" defer></script>
+</body>
+</html>

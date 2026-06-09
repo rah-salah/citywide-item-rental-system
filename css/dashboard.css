@@ -783,3 +783,16 @@ body.cw-admin-shell .cw-chart-card {
     min-height: auto;
   }
 }
+
+/* Final override: admin/superadmin desktop nav stays visible. */
+@media (min-width: 768px) {
+  body[data-cw-guard="admin"] > nav.cw-navbar,
+  body[data-cw-guard="superadmin"] > nav.cw-navbar,
+  body[data-cw-guard="admin"] .cw-navbar,
+  body[data-cw-guard="superadmin"] .cw-navbar {
+    display: block !important;
+  }
+  body.cw-admin-shell .cw-sidebar {
+    min-height: calc(100vh - 96px);
+  }
+}

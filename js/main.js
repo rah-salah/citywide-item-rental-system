@@ -1,3 +1,19 @@
+(function(){
+  function rootPrefix(){
+    var p = location.pathname.replace(/\\/g, "/");
+    if (/\/pages\/(admin|superadmin)\//.test(p)) return "../../";
+    if (/\/pages\//.test(p)) return "../";
+    if (/\/(admin|superadmin)\//.test(p)) return "../";
+    return "";
+  }
+  window.cwRootPrefix = rootPrefix;
+  window.cwPath = function(path){
+    if (!path || /^(https?:|data:|#|mailto:|tel:)/i.test(path)) return path;
+    if (/^(\.\.?\/|\/)/.test(path)) return path;
+    if (/^(assets|data|css|js)\//.test(path)) return rootPrefix() + path;
+    return path;
+  };
+})();
 /* Citywide Jigjiga — shared client script */
 (function () {
   var USER_KEY = "cw_user";
@@ -206,31 +222,11 @@
     }
 
     // Pages can either have a hardcoded profile dropdown (dashboard area) or just a Sign In button (public area)
-    var hardcodedDrop = navCollapse.querySelector(".dropdown [data-user-initial], .dropdown [data-user-name]");
-    if (hardcodedDrop) {
-      var existingDropdown = hardcodedDrop.closest(".dropdown");
-      if (existingDropdown) {
-        var profileLink = document.createElement("a");
-        profileLink.className = "cw-profile-link d-flex align-items-center gap-2 text-decoration-none";
-        profileLink.href = "profile.html";
-        profileLink.setAttribute("aria-label", "Open profile");
-        profileLink.innerHTML = '<span class="cw-avatar-sm" data-user-initial>'+initials(u && u.name)+'</span><span class="small fw-semibold" data-user-name>'+(u && u.name ? u.name : "User")+'</span>';
-        existingDropdown.replaceWith(profileLink);
-        hardcodedDrop = null;
-      }
-    }
+    navCollapse.querySelectorAll(".dropdown.ms-lg-auto, .cw-profile-link, .cw-profile-drop").forEach(function(el){ el.remove(); });
     if (u) {
       // Hide Sign In on public pages when signed in
       navCollapse.querySelectorAll('a[href="login.html"], a[href="register.html"]').forEach(function (a) { a.remove(); });
-      if (!hardcodedDrop && !btnRow.querySelector(".cw-profile-drop")) {
-        var drop = document.createElement("div");
-        drop.className = "cw-profile-drop";
-        drop.innerHTML =
-          '<a class="cw-avatar cw-avatar-sm cw-profile-btn text-decoration-none" href="profile.html" title="'+ (u.name||'Profile') +'" aria-label="Open profile">'+
-            initials(u.name) +
-          '</a>';
-        btnRow.appendChild(drop);
-      }
+      btnRow.querySelectorAll(".cw-profile-drop").forEach(function(el){ el.remove(); });
     } else {
       var prof = btnRow.querySelector(".cw-profile-drop");
       if (prof) prof.remove();
@@ -305,7 +301,7 @@
   }
 
   function buildDetails(data) {
-    var img = data.img || "assets/images/electronics.jpg";
+    var img = window.cwPath(data.img || "assets/images/electronics.jpg");
     var name = data.name || "Rental item";
     var bm = inferBrandModel(name);
     var category = data.category || "General";
@@ -501,6 +497,84 @@
 
 
 /* ====================================================================
+   Global language synchronization for public, user, admin and superadmin
+   ==================================================================== */
+(function(){
+  var KEY = "cw_lang";
+  var SO = {
+    "Home":"Guriga","Browse":"Eeg","List Item":"Liis Geli","About":"Ku Saabsan","Contact":"Nala Soo Xiriir","Sign In":"Soo Gal","Sign out":"Ka Bax","Logout":"Ka Bax",
+    "Dashboard":"Dashboor","Dashboard Overview":"Guudmarka Dashboorka","Overview":"Guudmar","Profile":"Akoonka","Settings":"Dejimaha","Messages":"Fariimaha",
+    "My Bookings":"Dalabyadayda","Rental History":"Taariikhda Kirada","Wishlist":"Liiska Rabitaanka","My Listings":"Liisaskayga","Incoming Bookings":"Dalabyada Soo Galaya","Earnings":"Dakhliga",
+    "Admin":"Maamule","Super Admin":"Maamule Sare","Manage Users":"Maamul Isticmaalayaasha","Manage Listings":"Maamul Liisaska","Categories":"Qaybaha","Reports":"Warbixinnada","Transactions":"Macaamilada","Analytics":"Falanqayn","Manage Admins":"Maamul Maamulayaasha","All Users":"Dhammaan Isticmaalayaasha","Audit Logs":"Diiwaanka Hawlaha","Site Settings":"Dejinta Goobta",
+    "Search":"Raadi","Search dashboard":"Raadi dashboorka","Notifications":"Ogeysiisyo","Language":"Luqad","Appearance":"Muuqaal","Dark Mode":"Hab Madow","Light Mode":"Hab Iftiin",
+    "Welcome back,":"Soo dhowow,","One account — switch between lending and renting any time.":"Hal akoon ayaad ku kala beddeli kartaa kirayn iyo kireynsi wakhti kasta.","New listing":"Liis cusub","I'm Lending":"Waxaan kireynayaa","I'm Renting":"Waxaan kiraysanayaa",
+    "My listings":"Liisaskayga","Incoming requests":"Codsiyada soo galaya","Total earnings":"Wadarta dakhliga","Messages from renters":"Fariimaha kiraystayaasha","Active rentals":"Kirooyin socda","Spent this month":"Kharashka bishan","Messages with owners":"Fariimaha mulkiilayaasha",
+    "Product Ratings":"Qiimaynta Alaabta","Reviews from verified renters.":"Faallooyin ka yimid kiraystayaal la xaqiijiyay.","Average Rating":"Celceliska Qiimaynta","total reviews":"faallooyin guud","Verified Renter":"Kirayste La Xaqiijiyay","No reviews yet. Be the first to review this item.":"Weli faallo ma jirto. Noqo qofka ugu horreeya ee qiimeeya alaabtan.","Rate This Item":"Qiimee Alaabtan","Star Rating":"Qiimaynta Xiddigaha","Review Comment":"Faallada Qiimaynta","Submit Review":"Gudbi Qiimaynta",
+    "Items you are currently renting from other people.":"Alaabta aad hadda ka kiraysatay dadka kale.","Past items you rented and payments made.":"Alaabtii hore ee aad kiraysatay iyo lacagihii la bixiyay.","Booking":"Dalab","Item":"Alaab","Owner":"Mulkiile","Return by":"Soo celi","Status":"Xaalad","Completed":"Dhammaystiran","Active":"Socda","Pending":"Sugaya","Track":"Raac","View":"Eeg",
+    "Profile updated.":"Akoonka waa la cusboonaysiiyay.","Personal details":"Faahfaahinta qofka","Full name":"Magaca buuxa","Email address":"Cinwaanka emailka","Phone number":"Lambarka telefoonka","Neighbourhood":"Xaafadda","Address":"Cinwaanka","About you":"Adiga kugu saabsan","Save changes":"Kaydi isbeddelada","Upload a clear profile picture.":"Soo geli sawir cad oo akoonka ah.",
+    "Owner Information":"Macluumaadka Mulkiilaha","Rental Conditions":"Shuruudaha Kirada","Description":"Sharaxaad","Request to Rent":"Codso Kiraysi","Contact Owner":"La Xiriir Mulkiilaha","Rental Guarantee":"Dammaanadda Kirada","Contact Information":"Macluumaadka Xiriirka"
+  };
+  function lang(){ try { return localStorage.getItem(KEY) || "en"; } catch(e){ return "en"; } }
+  function originalText(node){
+    if (!node.__cwI18nOriginal) node.__cwI18nOriginal = node.nodeValue;
+    return node.__cwI18nOriginal;
+  }
+  function translateText(text, target){
+    if (target === "en") return text;
+    var trimmed = text.trim();
+    if (!trimmed) return text;
+    var translated = SO[trimmed];
+    if (!translated) return text;
+    return text.replace(trimmed, translated);
+  }
+  function apply(target){
+    document.documentElement.setAttribute("lang", target === "so" ? "so" : "en");
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode:function(node){
+        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        var parent = node.parentElement;
+        if (!parent || /^(SCRIPT|STYLE|TEXTAREA)$/i.test(parent.tagName)) return NodeFilter.FILTER_REJECT;
+        if (parent.closest("[data-cw-no-translate]")) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [], n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    nodes.forEach(function(node){ node.nodeValue = translateText(originalText(node), target); });
+    document.querySelectorAll("[placeholder]").forEach(function(el){
+      if (!el.__cwI18nPlaceholder) el.__cwI18nPlaceholder = el.getAttribute("placeholder");
+      el.setAttribute("placeholder", translateText(el.__cwI18nPlaceholder, target));
+    });
+    document.querySelectorAll("[data-lang-btn], [data-cw-lang]").forEach(function(btn){
+      var bLang = btn.getAttribute("data-lang-btn") || btn.getAttribute("data-cw-lang");
+      btn.classList.toggle("active", bLang === target);
+    });
+    window.dispatchEvent(new CustomEvent("cw:languagechange", { detail:{ lang:target } }));
+  }
+  window.cwSetLanguage = function(target){
+    target = target === "so" ? "so" : "en";
+    try { localStorage.setItem(KEY, target); } catch(e){}
+    apply(target);
+  };
+  window.cwApplyLanguage = function(){ apply(lang()); };
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest("[data-lang-btn], [data-cw-lang]");
+    if (!btn) return;
+    var target = btn.getAttribute("data-lang-btn") || btn.getAttribute("data-cw-lang");
+    if (target) window.cwSetLanguage(target);
+  });
+  document.addEventListener("DOMContentLoaded", function(){
+    apply(lang());
+    var timer;
+    new MutationObserver(function(){
+      clearTimeout(timer);
+      timer = setTimeout(function(){ apply(lang()); }, 80);
+    }).observe(document.body, { childList:true, subtree:true });
+  });
+})();
+
+
+/* ====================================================================
    Dashboard architecture v11 — role guard + grouped sidebar
    ==================================================================== */
 (function(){
@@ -541,6 +615,7 @@
       { key:"analytics",    href:"analytics.html",    icon:"graph-up",       text:"Analytics" }
     ]},
     { label: "Session", items: [
+      { key:"profile", href:"profile.html", icon:"person-circle", text:"Profile" },
       { key:"signout", href:"login.html", icon:"box-arrow-right", text:"Sign out" }
     ]}
   ];
@@ -554,8 +629,8 @@
     var active = host.getAttribute("data-active") || "";
     // Pick logo path depending on whether we are inside /admin or /superadmin
     var inSection = /\/(admin|superadmin)\//.test(location.pathname);
-    var logoSrc = inSection ? "../assets/logos/logo-header.svg" : "assets/logos/logo-header.svg";
-    var profileHref = inSection ? "../profile.html" : "profile.html";
+    var logoSrc = window.cwPath("assets/logos/logo-header.svg");
+    var profileHref = "profile.html";
     var html = '<div class="cw-sidebar-logo"><img src="'+logoSrc+'" alt="Citywide"/></div>'+
                '<a class="px-2 mb-3 d-flex align-items-center gap-2 cw-sidebar-profile text-decoration-none" href="'+profileHref+'" aria-label="Open profile">'+
                '<div class="cw-avatar">'+ini+'</div>'+
@@ -630,8 +705,7 @@
 
   function dataPath(rel){
     // Pages may live in /admin or /superadmin — JSON is at root /data
-    var depth = (location.pathname.match(/\/(admin|superadmin)\//)) ? "../" : "";
-    return depth + "data/" + rel;
+    return window.cwPath("data/" + rel);
   }
 
   function fetchJSON(name){
@@ -759,7 +833,7 @@
       if (r.indexOf("super_admin")<0 && r.indexOf("admin")<0) { location.replace("../dashboard.html"); return false; }
       // Restrict admin from forbidden pages
       var page = location.pathname.split("/").pop().toLowerCase();
-      var forbidden = ["settings.html","admins.html","audit.html"];
+      var forbidden = ["admins.html","audit.html"];
       if (r.indexOf("admin")>=0 && r.indexOf("super_admin")<0 && forbidden.indexOf(page)>=0){
         location.replace("index.html"); return false;
       }
@@ -795,6 +869,7 @@
     { key:"wishlist",       href:"wishlist.html",       icon:"heart",          text:"Wishlist" }
   ];
   var ACCT = [
+    { key:"profile",  href:"profile.html",  icon:"person-circle",  text:"Profile" },
     { key:"messages", href:"messages.html", icon:"chat-dots",      text:"Messages" },
     { key:"settings", href:"settings.html", icon:"gear",           text:"Settings" },
     { key:"logout",   href:"logout.html",   icon:"box-arrow-right",text:"Logout" }
@@ -857,6 +932,10 @@
     if (!/dashboard\.html$/i.test(location.pathname)) return;
     var u = sget(); if(!u) return;
     var mode = getMode(u);
+    var r = roleArr(u);
+    var roleView = (r.indexOf("owner")>=0 && r.indexOf("renter")>=0) ? "both" : (r.indexOf("owner")>=0 ? "owner" : "renter");
+    document.body.setAttribute("data-cw-role-view", roleView);
+    document.body.setAttribute("data-cw-mode-view", mode);
     var lendTab = document.getElementById("tab-lend");
     var rentTab = document.getElementById("tab-rent");
     if (window.bootstrap && bootstrap.Tab){
@@ -1010,6 +1089,7 @@
 (function(){
   var SUPER = [
     { key:"overview",    href:"index.html",        icon:"speedometer2",   text:"Overview" },
+    { key:"profile",     href:"profile.html",      icon:"person-circle",  text:"Profile" },
     { key:"admins",      href:"admins.html",       icon:"shield-check",   text:"Manage Admins" },
     { key:"users",       href:"users.html",        icon:"people",         text:"All Users" },
     { key:"categories",  href:"categories.html",   icon:"tags",           text:"Categories" },
@@ -1021,7 +1101,7 @@
   ];
   var SESS = [{ key:"signout", href:"../logout.html", icon:"box-arrow-right", text:"Sign out" }];
 
-  function getUser(){ try { return JSON.parse(sessionStorage.getItem("cw_user")||"null"); } catch(e){ return null; } }
+  function getUser(){ try { return JSON.parse(sessionStorage.getItem("cw_user") || localStorage.getItem("cw_user") || "null"); } catch(e){ return null; } }
   function initials(name){ if(!name) return "G"; var p=name.trim().split(/\s+/); return (p.length===1?p[0].charAt(0):p[0].charAt(0)+p[p.length-1].charAt(0)).toUpperCase(); }
 
   // Builds the super admin sidebar HTML with logo, profile block, and grouped nav links.
@@ -1031,8 +1111,8 @@
     var avatar = u.avatar
       ? '<img src="'+u.avatar+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover;" alt="avatar"/>'
       : '<div class="cw-avatar">'+initials(u.name)+'</div>';
-    var html = '<div class="cw-sidebar-logo"><img src="../assets/logos/logo-header.svg" alt="Citywide"/></div>'+
-               '<a class="px-2 mb-3 d-flex align-items-center gap-2 cw-sidebar-profile text-decoration-none" href="../profile.html" aria-label="Open profile">'+avatar+
+    var html = '<div class="cw-sidebar-logo"><img src="'+window.cwPath("assets/logos/logo-header.svg")+'" alt="Citywide"/></div>'+
+               '<a class="px-2 mb-3 d-flex align-items-center gap-2 cw-sidebar-profile text-decoration-none" href="profile.html" aria-label="Open profile">'+avatar+
                '<div><div class="fw-semibold small">'+(u.name||"Super Admin")+'</div>'+
                '<div class="text-muted small">Platform owner</div></div></a>';
     groups.forEach(function(g){
@@ -1572,7 +1652,7 @@
   function slideAd(ad, idx, active){
     return ''
       + '<div class="carousel-item '+(active?'active':'')+'">'
-      + '  <div class="cw-hero-slide" style="background-image:url(\''+esc(ad.image)+'\')">'
+      + '  <div class="cw-hero-slide" style="background-image:url(\''+esc(window.cwPath(ad.image))+'\')">'
       + '    <div class="cw-hero-overlay"></div>'
       + '    <div class="container">'
       + '      <div class="row align-items-center">'
@@ -1591,7 +1671,7 @@
   function slidePromo(p, active){
     return ''
       + '<div class="carousel-item '+(active?'active':'')+'">'
-      + '  <div class="cw-hero-slide" style="background-image:url(\''+esc(p.image)+'\')">'
+      + '  <div class="cw-hero-slide" style="background-image:url(\''+esc(window.cwPath(p.image))+'\')">'
       + '    <div class="cw-hero-overlay"></div>'
       + '    <div class="container">'
       + '      <div class="row align-items-center">'
@@ -1746,7 +1826,7 @@
     var bg = document.createElement("div");
     bg.className = "cw-hero-bg-slider";
     bg.innerHTML = slides.map(function(s,i){
-      return '<div class="cw-hbg'+(i===0?' is-active':'')+'" style="background-image:url(\''+esc(s.image)+'\')" aria-hidden="true"></div>';
+      return '<div class="cw-hbg'+(i===0?' is-active':'')+'" style="background-image:url(\''+esc(window.cwPath(s.image))+'\')" aria-hidden="true"></div>';
     }).join("");
     hero.insertBefore(bg, hero.firstChild);
 
@@ -1781,7 +1861,7 @@
       var s = slides[i];
       card.classList.remove("is-visible");
       setTimeout(function(){
-        img.src = s.image;
+        img.src = window.cwPath(s.image);
         img.alt = s.title;
         badge.textContent = s.type === "ad" ? "Featured" : "Platform";
         badge.classList.toggle("is-value", s.type !== "ad");
@@ -2425,7 +2505,7 @@
       '<div class="cw-admin-actions">' +
         '<button type="button" class="cw-icon-btn" aria-label="Messages"><i class="bi bi-envelope"></i></button>' +
         '<button type="button" class="cw-icon-btn" aria-label="Notifications"><i class="bi bi-bell"></i></button>' +
-        '<a class="cw-admin-profile text-decoration-none" href="../profile.html" aria-label="Open profile"><span class="cw-avatar cw-avatar-sm">'+initials(user.name)+'</span><span class="cw-admin-profile-name">'+(user.name || roleName())+'</span></a>' +
+        '<div class="cw-admin-profile"><span class="cw-avatar cw-avatar-sm">'+initials(user.name)+'</span><span class="cw-admin-profile-name">'+(user.name || roleName())+'</span></div>' +
       '</div>';
     var actions = topbar.querySelector(".cw-admin-actions");
     ensureLangSwitch(actions);
