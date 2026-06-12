@@ -20,54 +20,11 @@
     var guard = document.body.dataset.cwGuard || "";
     var isAdminArea = guard === "admin" || guard === "superadmin";
 
-    // Admin and Super Admin pages keep the sidebar for account actions. The
-    // top bar is only global site navigation, with no role badge or sign-out.
     var container = navbar.querySelector(".container, .container-fluid");
     if (!container) return;
     if (isAdminArea) {
-      container.innerHTML =
-        '<a class="navbar-brand cw-brand cw-brand-text" href="../home.html">CityWide</a>'+
-        '<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">'+
-          '<span class="navbar-toggler-icon"></span>'+
-        '</button>'+
-        '<div class="collapse navbar-collapse" id="mainNav">'+
-          '<ul class="navbar-nav mx-auto mb-2 mb-lg-0">'+
-            '<li class="nav-item"><a class="nav-link" href="../home.html">Home</a></li>'+
-            '<li class="nav-item"><a class="nav-link" href="../listings.html">Browse</a></li>'+
-            '<li class="nav-item"><a class="nav-link" href="../about.html">About</a></li>'+
-            '<li class="nav-item"><a class="nav-link" href="../contact.html">Contact</a></li>'+
-          '</ul>'+
-          '<div class="d-flex ms-lg-auto align-items-lg-center gap-2 cw-desktop-auth">'+
-            '<div class="btn-group btn-group-sm cw-lang-switch" role="group" aria-label="Language">'+
-              '<button type="button" class="btn btn-outline-secondary active" data-lang-btn="en">EN</button>'+
-              '<button type="button" class="btn btn-outline-secondary" data-lang-btn="so">SO</button>'+
-            '</div>'+
-            '<a class="btn cw-signin-btn" href="../login.html">Sign In</a>'+
-          '</div>'+
-        '</div>';
-    } else {
-      var collapse = navbar.querySelector("#mainNav, .navbar-collapse");
-      if (collapse && !collapse.querySelector(".cw-desktop-auth")) {
-        var existingSignIn = collapse.querySelector(".cw-signin-btn");
-        var oldSignInWrap = existingSignIn ? existingSignIn.parentElement : null;
-        var tools = document.createElement("div");
-        tools.className = "d-flex ms-lg-auto align-items-lg-center gap-2 cw-desktop-auth";
-        tools.innerHTML =
-          '<div class="btn-group btn-group-sm cw-lang-switch" role="group" aria-label="Language">'+
-            '<button type="button" class="btn btn-outline-secondary active" data-lang-btn="en">EN</button>'+
-            '<button type="button" class="btn btn-outline-secondary" data-lang-btn="so">SO</button>'+
-          '</div>'+
-          '<button type="button" class="btn btn-sm btn-outline-secondary cw-desktop-theme" data-theme-toggle aria-label="Toggle dark mode">'+
-            '<i data-theme-icon class="bi bi-moon-stars-fill"></i>'+
-          '</button>';
-        if (existingSignIn) {
-          tools.appendChild(existingSignIn);
-          if (oldSignInWrap && !oldSignInWrap.children.length) oldSignInWrap.remove();
-        } else {
-          tools.insertAdjacentHTML("beforeend", '<a class="btn cw-signin-btn" href="login.html">Sign In</a>');
-        }
-        collapse.appendChild(tools);
-      }
+      navbar.remove();
+      return;
     }
 
     // Build / find right-side action group
@@ -138,30 +95,89 @@
       setTimeout(syncThemeLabel, 30);
     });
 
-    document.querySelectorAll(".cw-desktop-theme[data-theme-toggle]").forEach(function(btn){
-      if (btn.dataset.cwThemeBound) return;
-      btn.dataset.cwThemeBound = "1";
-      btn.addEventListener("click", function(){
-        var html = document.documentElement;
-        var dark = html.getAttribute("data-theme") === "dark";
-        html.setAttribute("data-theme", dark ? "light" : "dark");
-        html.classList.toggle("dark", !dark);
-        try { localStorage.setItem("cw_theme", dark ? "light" : "dark"); } catch(e){}
-        setTimeout(syncThemeLabel, 30);
-      });
-    });
+    cleanupDuplicateNavControls(navbar);
+  }
 
-    // Hide redundant standalone theme toggle in admin/superadmin top bars
-    // (the same control is now in the 3-dot menu).
-    var standalone = container.querySelector("[data-theme-toggle]");
-    if (standalone && standalone.closest(".cw-nav-actions") !== actions) {
-      // keep it (it's outside our actions container)
-    }
+  function cleanupDuplicateNavControls(navbar){
+    var collapse = navbar.querySelector("#mainNav, .navbar-collapse");
+    if (!collapse) return;
+    collapse.querySelectorAll(".cw-desktop-auth").forEach(function(el){ el.remove(); });
+    var clusters = collapse.querySelectorAll(".cw-nav-cluster");
+    clusters.forEach(function(cluster, idx){ if (idx > 0) cluster.remove(); });
+    var host = collapse.querySelector(".cw-nav-cluster") || collapse;
+    host.querySelectorAll(".cw-lang-switch").forEach(function(el, idx){ if (idx > 0) el.remove(); });
+    host.querySelectorAll("[data-theme-toggle]").forEach(function(el, idx){ if (idx > 0) el.remove(); });
   }
 
   /* ---------- 2. Back buttons intentionally disabled ---------- */
   function setupBackButton(){
     document.querySelectorAll(".cw-back-btn").forEach(function(btn){ btn.remove(); });
+  }
+
+  function removeRangeLabels(){
+    document.querySelectorAll("#cwRangeLabel").forEach(function(label){
+      var host = label.closest(".text-muted.small, .ms-auto, div");
+      if (host) host.remove();
+      else label.remove();
+    });
+  }
+
+  /* ---------- 2b. Dashboard sidebar collapse + mobile drawer ---------- */
+  function setupDashboardSidebar(){
+    var sidebar = document.querySelector("body[data-cw-guard='user'] .cw-sidebar, body[data-cw-guard='profile'] .cw-sidebar");
+    if (!sidebar || sidebar.dataset.cwUserSidebarEnhanced) return;
+    sidebar.dataset.cwUserSidebarEnhanced = "1";
+    document.body.classList.add("cw-user-shell");
+
+    sidebar.querySelectorAll(".nav-link").forEach(function(link){
+      if (link.querySelector(".cw-sidebar-label")) return;
+      var label = "";
+      Array.prototype.slice.call(link.childNodes).forEach(function(node){
+        if (node.nodeType === 3 && node.nodeValue.trim()) {
+          label += node.nodeValue.trim();
+          node.nodeValue = "";
+        }
+      });
+      if (label) {
+        var span = document.createElement("span");
+        span.className = "cw-sidebar-label";
+        span.textContent = label;
+        link.appendChild(span);
+      }
+      link.setAttribute("title", (link.textContent || "").trim());
+    });
+
+    var logo = sidebar.querySelector(".cw-sidebar-logo") || sidebar.firstElementChild;
+    if (logo && !logo.querySelector("[data-cw-user-sidebar-toggle]")) {
+      var toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "cw-sidebar-toggle cw-user-sidebar-toggle";
+      toggle.setAttribute("data-cw-user-sidebar-toggle", "");
+      toggle.setAttribute("aria-label", "Toggle dashboard sidebar");
+      toggle.innerHTML = '<i class="bi bi-chevron-left"></i>';
+      toggle.addEventListener("click", function(){
+        var collapsed = !document.body.classList.contains("cw-user-sidebar-collapsed");
+        document.body.classList.toggle("cw-user-sidebar-collapsed", collapsed);
+        toggle.querySelector("i").className = collapsed ? "bi bi-chevron-right" : "bi bi-chevron-left";
+      });
+      logo.appendChild(toggle);
+    }
+
+    if (!document.querySelector("[data-cw-mobile-dashboard-toggle]")) {
+      var mobile = document.createElement("button");
+      mobile.type = "button";
+      mobile.className = "cw-mobile-dashboard-toggle";
+      mobile.setAttribute("data-cw-mobile-dashboard-toggle", "");
+      mobile.setAttribute("aria-expanded", "false");
+      mobile.innerHTML = '<i class="bi bi-list"></i><span>Dashboard Menu</span>';
+      mobile.addEventListener("click", function(){
+        var open = !document.body.classList.contains("cw-mobile-dashboard-open");
+        document.body.classList.toggle("cw-mobile-dashboard-open", open);
+        mobile.setAttribute("aria-expanded", open ? "true" : "false");
+        mobile.querySelector("i").className = open ? "bi bi-x-lg" : "bi bi-list";
+      });
+      sidebar.parentNode.insertBefore(mobile, sidebar);
+    }
   }
 
   /* ---------- 3. Password eye icons ---------- */
@@ -200,6 +216,8 @@
   ready(function(){
     setupTopNav();
     setupBackButton();
+    removeRangeLabels();
+    setupDashboardSidebar();
     setupPasswordEyes();
     // Re-scan for password fields injected later (modals etc.)
     var mo = new MutationObserver(function(){ setupPasswordEyes(); });

@@ -57,6 +57,19 @@
   function escapeHtml(s) {
     return String(s).replace(/[&<>"]/g, function(c){ return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]; });
   }
+  function localReply(text) {
+    var q = String(text || "").toLowerCase();
+    if (lang() === "so") {
+      if (q.indexOf("liis") >= 0) return "Si aad alaab u liis geliso, guji List Item, geli magaca, qaybta, qiimaha maalintii, sawirrada, iyo shuruudaha kirada. Kadib admin ayaa dib u eegi kara liiska.";
+      if (q.indexOf("chapa") >= 0 || q.indexOf("lacag") >= 0) return "Lacag bixinta Chapa waa demo halkan. Fikradda waa in lacagta lagu hayo si ammaan ah ilaa wareejinta alaabtu dhammaato.";
+      if (q.indexOf("muuqda") >= 0 || q.indexOf("featured") >= 0) return "Liisaska muuqda waa alaab la hormariyay si ay dadka si fudud ugu arkaan bogga hore ama natiijooyinka raadinta.";
+      return "Si aad alaab u kiraysato, fur Browse, dooro alaabta, eeg faahfaahinta, kadib guji Request to Rent. Codsiga demo-ga wuxuu ka muuqanayaa Admin Dashboard.";
+    }
+    if (q.indexOf("list") >= 0) return "To list your item, open List Item, add the title, category, daily price, photos, and rental conditions. The admin can then review the listing.";
+    if (q.indexOf("chapa") >= 0 || q.indexOf("payment") >= 0) return "Chapa payment is demo-only here. The intended flow is safe payment holding until the rental handoff is complete.";
+    if (q.indexOf("featured") >= 0) return "Featured listings are promoted items that can appear more prominently on the homepage or browsing results.";
+    return "To rent an item, open Browse, choose an item, view its details, and click Request to Rent. The demo request appears in the Admin Dashboard.";
+  }
 
   function build() {
     var fab = el("button", "cw-chat-fab");
@@ -135,7 +148,8 @@
     function askGemini() {
       var key = window.CITYWIDE_GEMINI_KEY;
       if (!key || key === "REPLACE_WITH_YOUR_GEMINI_API_KEY") {
-        addMsg("bot", copy().noKey, "error");
+        addMsg("bot", localReply(history[history.length - 1] && history[history.length - 1].content));
+        sugWrap.style.display = "";
         return;
       }
       sendBtn.disabled = true;
@@ -159,7 +173,8 @@
         typing.remove();
         sendBtn.disabled = false;
         if (!res.ok) {
-          addMsg("bot", ((res.j && res.j.error && res.j.error.message) || copy().generic), "error");
+          addMsg("bot", localReply(history[history.length - 1] && history[history.length - 1].content));
+          sugWrap.style.display = "";
           return;
         }
         var reply = "";
@@ -167,11 +182,13 @@
         catch (e) { reply = copy().generic; }
         history.push({ role: "model", content: reply });
         addMsg("bot", reply);
+        sugWrap.style.display = "";
       })
       .catch(function(err){
         typing.remove();
         sendBtn.disabled = false;
-        addMsg("bot", copy().network + err.message, "error");
+        addMsg("bot", localReply(history[history.length - 1] && history[history.length - 1].content));
+        sugWrap.style.display = "";
       });
     }
     window.addEventListener("cw:languagechange", syncLanguage);

@@ -316,6 +316,36 @@
         options: commonOpts()
       });
     }
+
+    var elPopular = document.getElementById("chartPopularRented");
+    if (elPopular) {
+      var names = ["Canon EOS R5", "Honda Generator", "Wedding Tent", "JBL Speakers", "Bosch Drill", "Projector"];
+      var base = filtered(STATE.bookings).length || 24;
+      var counts = names.map(function(_, i){ return Math.max(4, Math.round(base / (i + 2)) + (6 - i)); });
+      charts.popular = new Chart(elPopular, {
+        type:"bar",
+        data:{ labels:names, datasets:[
+          { label:"Completed rentals", data:counts, backgroundColor:"rgba(8,145,178,.86)", borderRadius:8, borderSkipped:false }
+        ]},
+        options: commonOpts({ indexAxis:"y", scales:{ x:{ beginAtZero:true }, y:{ grid:{display:false}, ticks:{ font:{ size:10 } } } } })
+      });
+    }
+
+    var elDemand = document.getElementById("chartCategoryDemand");
+    if (elDemand) {
+      var cats = ["Cameras", "Power", "Events", "Tools", "Electronics"];
+      var totalListings = filtered(STATE.listings).length || 40;
+      var demand = cats.map(function(_, i){ return Math.max(8, Math.round(totalListings / (i + 1))); });
+      charts.demand = new Chart(elDemand, {
+        type:"doughnut",
+        data:{ labels:cats, datasets:[{
+          data:demand,
+          backgroundColor:["#0891b2","#0e7490","#38bdf8","#64748b","#94a3b8"],
+          borderWidth:0
+        }]},
+        options:{ responsive:true, maintainAspectRatio:false, cutout:"64%", plugins:{ legend:{ position:"bottom", labels:{ usePointStyle:true, padding:14, font:{size:11} } } } }
+      });
+    }
   }
 
   /* ---------- presets + filter UI ---------- */
@@ -341,7 +371,7 @@
       el.classList.toggle("is-active", el.getAttribute("data-preset") === FILTER.preset);
     });
     var lbl = document.getElementById("cwRangeLabel");
-    if (lbl) lbl.textContent = (FILTER.from || "—") + "  →  " + (FILTER.to || "—");
+    if (lbl) lbl.textContent = "";
   }
   function refresh(){ renderKpis(); renderMetricCharts(); }
 

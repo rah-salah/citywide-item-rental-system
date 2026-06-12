@@ -142,7 +142,9 @@
   // ===== Render dynamic user info =====
   function renderUser() {
     var u = getUser();
-    var name = (u && u.name) ? u.name : "User";
+    var guard = document.body.getAttribute("data-cw-guard") || "";
+    var fallbackName = guard === "superadmin" ? "Super Admin" : guard === "admin" ? "Admin" : "User";
+    var name = (u && u.name) ? u.name : fallbackName;
     var area = (u && u.area) ? u.area : "Jigjiga Central";
     document.querySelectorAll("[data-user-name]").forEach(function (el) { el.textContent = name; });
     document.querySelectorAll("[data-user-area]").forEach(function (el) { el.textContent = area; });
@@ -512,7 +514,16 @@
     "Product Ratings":"Qiimaynta Alaabta","Reviews from verified renters.":"Faallooyin ka yimid kiraystayaal la xaqiijiyay.","Average Rating":"Celceliska Qiimaynta","total reviews":"faallooyin guud","Verified Renter":"Kirayste La Xaqiijiyay","No reviews yet. Be the first to review this item.":"Weli faallo ma jirto. Noqo qofka ugu horreeya ee qiimeeya alaabtan.","Rate This Item":"Qiimee Alaabtan","Star Rating":"Qiimaynta Xiddigaha","Review Comment":"Faallada Qiimaynta","Submit Review":"Gudbi Qiimaynta",
     "Items you are currently renting from other people.":"Alaabta aad hadda ka kiraysatay dadka kale.","Past items you rented and payments made.":"Alaabtii hore ee aad kiraysatay iyo lacagihii la bixiyay.","Booking":"Dalab","Item":"Alaab","Owner":"Mulkiile","Return by":"Soo celi","Status":"Xaalad","Completed":"Dhammaystiran","Active":"Socda","Pending":"Sugaya","Track":"Raac","View":"Eeg",
     "Profile updated.":"Akoonka waa la cusboonaysiiyay.","Personal details":"Faahfaahinta qofka","Full name":"Magaca buuxa","Email address":"Cinwaanka emailka","Phone number":"Lambarka telefoonka","Neighbourhood":"Xaafadda","Address":"Cinwaanka","About you":"Adiga kugu saabsan","Save changes":"Kaydi isbeddelada","Upload a clear profile picture.":"Soo geli sawir cad oo akoonka ah.",
-    "Owner Information":"Macluumaadka Mulkiilaha","Rental Conditions":"Shuruudaha Kirada","Description":"Sharaxaad","Request to Rent":"Codso Kiraysi","Contact Owner":"La Xiriir Mulkiilaha","Rental Guarantee":"Dammaanadda Kirada","Contact Information":"Macluumaadka Xiriirka"
+    "Owner Information":"Macluumaadka Mulkiilaha","Rental Conditions":"Shuruudaha Kirada","Description":"Sharaxaad","Request to Rent":"Codso Kiraysi","Contact Owner":"La Xiriir Mulkiilaha","Rental Guarantee":"Dammaanadda Kirada","Contact Information":"Macluumaadka Xiriirka",
+    "Operations Control":"Xakamaynta Hawlgalka","Moderate listings, review approvals and keep the marketplace healthy.":"Hubi liisaska, ansixi dalabyada, kuna ilaali suuqa inuu caafimaad qabo.","Review listings":"Eeg liisaska","Manage users":"Maamul isticmaalayaasha","Open reports":"Fur warbixinnada",
+    "Today's queue":"Safka maanta","Pending listings":"Liisaska sugaya","Recent contact messages":"Fariimaha xiriirka ee dhowaan","Rental Requests":"Codsiyada Kirada","Request ID":"Aqoonsiga Codsiga","Renter":"Kirayste","Date":"Taariikh","Platform owner":"Milkiilaha Platform-ka",
+    "Search dashboard":"Raadi dashboorka","Manage Listings":"Maamul Liisaska","Manage Admins":"Maamul Maamulayaasha","All Users":"Dhammaan Isticmaalayaasha","Audit Logs":"Diiwaanka Hawlaha","Site Settings":"Dejinta Goobta","Session":"Kalfadhi","Dashboard Menu":"Liiska Dashboorka",
+    "List Your Item — Free":"Liis Geli Alaabtaada — Bilaash","Free to join. Rent or lend across Jigjiga.":"Ku biiristu waa bilaash. Ka kirayso ama ku kiree Jigjiga.",
+    "About Citywide Jigjiga":"Ku Saabsan Citywide Jigjiga","Built for Jigjiga's rental economy":"Waxaa loo dhisay dhaqaalaha kirada ee Jigjiga","Why Citywide?":"Maxaa Citywide?","Local-first":"Maxalli marka hore","Safe rentals":"Kirooyin ammaan ah","Simple payments":"Lacag bixin fudud",
+    "Contact Citywide Jigjiga":"La Xiriir Citywide Jigjiga","Send us a message":"Noo dir fariin","Your name":"Magacaaga","Your email":"Emailkaaga","Subject":"Mawduuc","Message":"Fariin","Send Message":"Dir Fariin","Contact Information":"Macluumaadka Xiriirka",
+    "Browse Listings":"Eeg Liisaska","Search rentals":"Raadi kirooyinka","Daily price":"Qiimaha maalintii","Security deposit":"Dhigaalka damaanadda","Available now":"Hadda waa la heli karaa","View Details":"Eeg Faahfaahinta",
+    "Item title":"Cinwaanka alaabta","Item category":"Qaybta alaabta","Upload photos":"Soo geli sawirro","Rental price":"Qiimaha kirada","Submit listing":"Gudbi liiska","Add Listing":"Ku dar Liis","List":"Liis",
+    "Import projects":"Soo geli mashruucyo","Projects":"Mashruucyo","Toggle navigation menu":"Fur ama xir liiska navigation-ka"
   };
   function lang(){ try { return localStorage.getItem(KEY) || "en"; } catch(e){ return "en"; } }
   function originalText(node){
@@ -527,7 +538,11 @@
     if (!translated) return text;
     return text.replace(trimmed, translated);
   }
-  function apply(target){
+  var applying = false;
+  function apply(target, options){
+    if (applying) return;
+    applying = true;
+    options = options || {};
     document.documentElement.setAttribute("lang", target === "so" ? "so" : "en");
     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode:function(node){
@@ -549,14 +564,15 @@
       var bLang = btn.getAttribute("data-lang-btn") || btn.getAttribute("data-cw-lang");
       btn.classList.toggle("active", bLang === target);
     });
-    window.dispatchEvent(new CustomEvent("cw:languagechange", { detail:{ lang:target } }));
+    applying = false;
+    if (!options.silent) window.dispatchEvent(new CustomEvent("cw:languagechange", { detail:{ lang:target } }));
   }
   window.cwSetLanguage = function(target){
     target = target === "so" ? "so" : "en";
     try { localStorage.setItem(KEY, target); } catch(e){}
     apply(target);
   };
-  window.cwApplyLanguage = function(){ apply(lang()); };
+  window.cwApplyLanguage = function(){ apply(lang(), { silent:true }); };
   document.addEventListener("click", function(e){
     var btn = e.target.closest("[data-lang-btn], [data-cw-lang]");
     if (!btn) return;
@@ -568,7 +584,7 @@
     var timer;
     new MutationObserver(function(){
       clearTimeout(timer);
-      timer = setTimeout(function(){ apply(lang()); }, 80);
+      timer = setTimeout(function(){ apply(lang(), { silent:true }); }, 80);
     }).observe(document.body, { childList:true, subtree:true });
   });
 })();
@@ -623,7 +639,8 @@
   // Builds the sidebar HTML for user/admin pages, including logo, user card, and grouped nav links.
   function renderSidebar(host, groups){
     var u = getUser() || {};
-    var name = u.name || "User";
+    var guard = document.body.getAttribute("data-cw-guard") || "";
+    var name = u.name || (guard === "superadmin" ? "Super Admin" : guard === "admin" ? "Admin" : "User");
     var area = u.area || "Jigjiga Central";
     var ini  = (name||"G").trim().split(/\s+/).map(function(p){return p.charAt(0);}).slice(0,2).join("").toUpperCase()||"G";
     var active = host.getAttribute("data-active") || "";
@@ -2301,6 +2318,18 @@
     for (var i=1; i<=5; i++) out += '<i class="bi bi-star'+(i<=n ? "-fill" : "")+'"></i>';
     return out;
   }
+  function starButtons(n){
+    var out = "";
+    for (var i=1; i<=5; i++) {
+      out += '<button type="button" class="cw-star'+(i<=n ? " is-active" : "")+'" data-rent-review-star="'+i+'" aria-label="'+i+' stars"><i class="bi bi-star-fill"></i></button>';
+    }
+    return out;
+  }
+  function paintStarButtons(form, value){
+    form.querySelectorAll("[data-rent-review-star]").forEach(function(btn){
+      btn.classList.toggle("is-active", Number(btn.getAttribute("data-rent-review-star")) <= value);
+    });
+  }
   function renderRows(host){
     var rows = load();
     host.innerHTML = rows.map(function(r){
@@ -2325,7 +2354,7 @@
         '<div class="col-lg-5"><div class="cw-card p-4 h-100">'+
           '<h5 class="mb-3">Submit a review</h5>'+
           '<form data-cw-review-form>'+
-            '<div class="mb-3"><label class="form-label fw-semibold">Rating</label><select name="rating" class="form-select"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></div>'+
+            '<div class="mb-3"><label class="form-label fw-semibold">Rating</label><div class="cw-star-picker" data-rent-review-picker>'+starButtons(5)+'</div><input type="hidden" name="rating" value="5"></div>'+
             '<div class="mb-3"><label class="form-label fw-semibold">Review comment</label><textarea name="comment" class="form-control" rows="4" placeholder="Share your rental experience" required></textarea></div>'+
             '<button class="btn btn-brand w-100" type="submit"><i class="bi bi-send me-1"></i>Submit review</button>'+
           '</form>'+
@@ -2340,6 +2369,14 @@
     pane.appendChild(section);
     var tbody = section.querySelector("[data-cw-review-list]");
     renderRows(tbody);
+    section.querySelectorAll("[data-rent-review-star]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var form = btn.closest("form");
+        var value = Number(btn.getAttribute("data-rent-review-star"));
+        form.rating.value = value;
+        paintStarButtons(form, value);
+      });
+    });
     section.querySelector("[data-cw-review-form]").addEventListener("submit", function(e){
       e.preventDefault();
       var form = e.currentTarget;
@@ -2353,6 +2390,8 @@
       });
       save(rows);
       form.reset();
+      form.rating.value = "5";
+      paintStarButtons(form, 5);
       renderRows(tbody);
     });
   }
@@ -2384,6 +2423,10 @@
     try { return localStorage.getItem(LANG_KEY) || "en"; } catch(e){ return "en"; }
   }
   function setLang(lang){
+    if (window.cwSetLanguage) {
+      window.cwSetLanguage(lang);
+      return;
+    }
     try { localStorage.setItem(LANG_KEY, lang); } catch(e){}
     document.documentElement.setAttribute("lang", lang === "so" ? "so" : "en");
     document.querySelectorAll("[data-lang-btn]").forEach(function(btn){
@@ -2466,6 +2509,22 @@
     }
     wrapLinkLabels(sidebar);
     setCollapsed(storedCollapsed());
+    if (!document.querySelector("[data-cw-admin-mobile-toggle]")) {
+      var mobile = document.createElement("button");
+      mobile.type = "button";
+      mobile.className = "cw-mobile-dashboard-toggle cw-admin-mobile-toggle";
+      mobile.setAttribute("data-cw-admin-mobile-toggle", "");
+      mobile.setAttribute("aria-expanded", "false");
+      mobile.innerHTML = '<i class="bi bi-list"></i><span>Dashboard Menu</span>';
+      mobile.addEventListener("click", function(){
+        var open = !document.body.classList.contains("cw-mobile-dashboard-open");
+        document.body.classList.toggle("cw-mobile-dashboard-open", open);
+        mobile.setAttribute("aria-expanded", open ? "true" : "false");
+        var icon = mobile.querySelector("i");
+        if (icon) icon.className = open ? "bi bi-x-lg" : "bi bi-list";
+      });
+      sidebar.parentNode.insertBefore(mobile, sidebar);
+    }
   }
   function ensureLangSwitch(host){
     if (host.querySelector(".cw-lang-switch")) return;
@@ -2505,7 +2564,7 @@
       '<div class="cw-admin-actions">' +
         '<button type="button" class="cw-icon-btn" aria-label="Messages"><i class="bi bi-envelope"></i></button>' +
         '<button type="button" class="cw-icon-btn" aria-label="Notifications"><i class="bi bi-bell"></i></button>' +
-        '<div class="cw-admin-profile"><span class="cw-avatar cw-avatar-sm">'+initials(user.name)+'</span><span class="cw-admin-profile-name">'+(user.name || roleName())+'</span></div>' +
+        '<div class="cw-admin-profile"><span class="cw-avatar cw-avatar-sm">'+initials(user.name || roleName())+'</span><span class="cw-admin-profile-name">'+(user.name || user.fullName || roleName())+'</span></div>' +
       '</div>';
     var actions = topbar.querySelector(".cw-admin-actions");
     ensureLangSwitch(actions);

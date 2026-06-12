@@ -1214,6 +1214,12 @@ body[data-cw-role-view="both"] main > .d-flex:first-child {
   font-size: 1.55rem;
   cursor: pointer;
 }
+.cw-star-picker .cw-star:hover,
+.cw-star-picker .cw-star:focus-visible {
+  color: #0891b2;
+  transform: translateY(-1px);
+  outline: none;
+}
 .cw-review-item {
   padding: 16px 0;
   border-top: 1px solid var(--cw-border);
@@ -1379,89 +1385,453 @@ body[data-cw-role-view="both"] main > .d-flex:first-child {
   color: #7dd3fc;
 }
 
-/* ===== UI fixes 20260609 ===================================
-   - Hide top public navbar on mobile (bottom nav handles it)
-   - Hide top navbar entirely on admin/superadmin (removed in HTML too)
-   - Keep buttons from overflowing in Somali (long words)
-   - Off-canvas sidebar on mobile for admin/superadmin
-============================================================ */
-
-/* Nowrap on header / nav buttons so SO labels don't overflow */
-.cw-navbar .cw-signin-btn,
-.cw-navbar .btn,
-.cw-signin-btn,
-.cw-lang-switch button {
-  white-space: nowrap;
-  max-width: 100%;
-}
-.cw-navbar .navbar-nav .nav-link { white-space: nowrap; }
-
-/* Mobile: hide top public navbar — the floating bottom nav (.cw-mobnav) takes over */
-@media (max-width: 991.98px) {
-  body:not([data-cw-guard="admin"]):not([data-cw-guard="superadmin"]) .cw-navbar { display: none !important; }
-  body { padding-bottom: 80px; }
+/* ===== vFinal: dashboard nav cleanup, mobile drawer, blue active states ===== */
+:root {
+  --cw-admin-accent: #0891b2;
+  --cw-admin-accent-soft: #e0f7ff;
+  --cw-success: #0891b2;
 }
 
-/* Admin / Super-admin: off-canvas sidebar on mobile + floating hamburger */
-.cw-admin-mob-toggle {
-  display: none;
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  z-index: 1080;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  border: 1px solid var(--cw-border, #e5e7eb);
-  background: #fff;
-  color: #111;
-  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+body[data-cw-guard="admin"] > nav.cw-navbar,
+body[data-cw-guard="superadmin"] > nav.cw-navbar {
+  display: none !important;
+}
+
+.cw-theme-admin .cw-navbar,
+.cw-theme-super .cw-navbar {
+  display: none !important;
+}
+
+.cw-profile-drop,
+.cw-navbar .cw-profile-link {
+  display: none !important;
+}
+
+.cw-sidebar .nav-link.active,
+body[data-cw-guard="user"] .cw-sidebar .nav-link.active,
+body[data-cw-guard="profile"] .cw-sidebar .nav-link.active,
+body[data-cw-guard="admin"] .cw-sidebar .nav-link.active,
+body[data-cw-guard="superadmin"] .cw-sidebar .nav-link.active {
+  background: #0891b2 !important;
+  color: #fff !important;
+}
+
+body[data-cw-role-view="owner"] .cw-dash-tabs .nav-link.active,
+body[data-cw-mode-view="lend"] .cw-dash-tabs .nav-link.active,
+body[data-cw-role-view="renter"] .cw-dash-tabs .nav-link.active,
+body[data-cw-mode-view="rent"] .cw-dash-tabs .nav-link.active {
+  background: #0891b2 !important;
+}
+
+body[data-cw-role-view="owner"] main > .d-flex:first-child,
+body[data-cw-role-view="renter"] main > .d-flex:first-child,
+body[data-cw-role-view="both"] main > .d-flex:first-child {
+  border-left-color: #0891b2 !important;
+}
+
+.cw-kpi--teal::before,
+.text-teal,
+.text-success,
+.bg-success {
+  --bs-success-rgb: 8,145,178;
+}
+.text-teal,
+.text-success {
+  color: #0891b2 !important;
+}
+.bg-success {
+  background-color: #0891b2 !important;
+}
+
+body.cw-user-shell .cw-sidebar {
+  transition: flex-basis .2s ease, width .2s ease, max-width .2s ease;
+}
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar {
+  flex: 0 0 76px !important;
+  width: 76px !important;
+  max-width: 76px !important;
+}
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar-logo {
+  justify-content: center;
+}
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar-logo img,
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar .cw-sidebar-label,
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar .cw-sidebar-group-label,
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar-profile > div:not(.cw-avatar) {
+  display: none !important;
+}
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar-logo::before {
+  content: "C";
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-}
-:root[data-theme="dark"] .cw-admin-mob-toggle {
-  background: #1f2632;
+  background: #0891b2;
   color: #fff;
-  border-color: #2c3340;
+  font-weight: 800;
 }
-.cw-admin-mob-backdrop {
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar .nav-link,
+body.cw-user-shell.cw-user-sidebar-collapsed .cw-sidebar-profile {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.cw-mobile-dashboard-toggle {
   display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.45);
-  z-index: 1060;
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--cw-border);
+  border-radius: 10px;
+  background: var(--cw-card);
+  color: var(--cw-text);
+  font-weight: 800;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  margin-bottom: 10px;
 }
 
-@media (max-width: 991.98px) {
-  body[data-cw-guard="admin"],
-  body[data-cw-guard="superadmin"] { padding-top: 64px; }
+:root[data-theme="dark"] .cw-sidebar-profile,
+:root[data-theme="dark"] .cw-sidebar-profile .fw-semibold,
+:root[data-theme="dark"] .cw-mobile-dashboard-toggle {
+  color: #e5edf5 !important;
+}
 
-  body[data-cw-guard="admin"] .cw-admin-mob-toggle,
-  body[data-cw-guard="superadmin"] .cw-admin-mob-toggle { display: inline-flex; }
-
-  body[data-cw-guard="admin"] .cw-sidebar,
-  body[data-cw-guard="superadmin"] .cw-sidebar {
+@media (max-width: 767px) {
+  .cw-navbar .navbar-toggler,
+  .cw-navbar .navbar-collapse {
+    display: none !important;
+  }
+  .cw-navbar .cw-more-menu {
+    display: inline-flex !important;
+  }
+  .cw-navbar .cw-nav-actions {
+    margin-left: auto !important;
+  }
+  body.cw-user-shell .cw-mobile-dashboard-toggle {
+    display: inline-flex;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1060;
+    width: 38px;
+    min-height: 38px;
+    height: 38px;
+    border-radius: 10px;
+    padding: 0;
+    justify-content: center;
+    background: #1f1f1f;
+    border-color: rgba(255,255,255,.12);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(0,0,0,.24);
+  }
+  body.cw-user-shell .cw-mobile-dashboard-toggle span {
+    display: none;
+  }
+  body.cw-user-shell .cw-sidebar {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
-    width: 82%;
-    max-width: 320px;
-    z-index: 1070;
-    transform: translateX(-105%);
-    transition: transform .25s ease;
+    z-index: 1055;
+    flex: 0 0 250px !important;
+    width: 250px !important;
+    max-width: 82vw !important;
+    height: 100vh;
+    min-height: 100vh !important;
     overflow-y: auto;
-    background: #fff;
-    box-shadow: 0 0 32px rgba(0,0,0,.2);
-    border-right: 1px solid var(--cw-border, #e5e7eb);
+    border-radius: 0 18px 18px 0 !important;
+    padding-top: 58px !important;
+    background: #202020 !important;
+    box-shadow: 18px 0 45px rgba(0,0,0,.35);
   }
-  :root[data-theme="dark"] body[data-cw-guard="admin"] .cw-sidebar,
-  :root[data-theme="dark"] body[data-cw-guard="superadmin"] .cw-sidebar {
-    background: #151b24;
+  body.cw-user-shell.cw-mobile-dashboard-open .cw-sidebar {
+    display: block;
   }
+  body.cw-user-shell.cw-mobile-dashboard-open main {
+    transform: translateX(22px);
+    transition: transform .2s ease;
+  }
+  body.cw-user-shell .cw-sidebar nav,
+  body.cw-user-shell.cw-mobile-dashboard-open .cw-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+  body.cw-user-shell .cw-sidebar .nav-link {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  body.cw-user-shell .cw-user-sidebar-toggle {
+    display: none !important;
+  }
+}
 
-  body.cw-mob-sidebar-open[data-cw-guard="admin"] .cw-sidebar,
-  body.cw-mob-sidebar-open[data-cw-guard="superadmin"] .cw-sidebar { transform: translateX(0); }
-  body.cw-mob-sidebar-open .cw-admin-mob-backdrop { display: block; }
+@media (max-width: 420px) {
+  .cw-lang-switch,
+  .cw-desktop-auth,
+  .cw-nav-cluster {
+    max-width: 100%;
+  }
+  .btn,
+  .cw-signin-btn,
+  .cw-lang-switch button,
+  .cw-chat-suggestions button {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Final polish for duplicate controls, dark profile text, and Somali wrapping. */
+.cw-navbar .cw-desktop-auth {
+  display: none !important;
+}
+
+.cw-admin-profile {
+  display: inline-flex !important;
+  color: var(--cw-text) !important;
+  min-width: 0;
+}
+:root[data-theme="dark"] .cw-admin-profile,
+:root[data-theme="dark"] .cw-admin-profile-name {
+  color: #fff !important;
+}
+
+.cw-sidebar-profile,
+.cw-sidebar-profile .fw-semibold,
+.cw-sidebar-profile .text-muted {
+  overflow-wrap: anywhere;
+}
+:root[data-theme="dark"] .cw-sidebar-profile,
+:root[data-theme="dark"] .cw-sidebar-profile .fw-semibold,
+:root[data-theme="dark"] .cw-sidebar-profile .small {
+  color: #fff !important;
+}
+
+.cw-card,
+.cw-card *,
+.cw-dash-tabs .nav-link,
+.cw-section-title,
+.cw-admin-topbar,
+.cw-admin-topbar *,
+.cw-navbar,
+.cw-navbar *,
+.cw-sidebar,
+.cw-sidebar * {
+  min-width: 0;
+}
+
+.cw-dash-tabs {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cw-dash-tabs .nav-link,
+.btn,
+.cw-signin-btn,
+.cw-lang-switch button,
+.cw-more-dropdown .dropdown-item {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+}
+
+.cw-navbar .nav-link.active,
+.cw-navbar .nav-link:hover,
+.cw-mobnav__item.is-active,
+.cw-mobnav__item:hover {
+  color: #0891b2 !important;
+}
+.cw-lang-switch button.active,
+.cw-theme-toggle:hover,
+.cw-more-btn:hover,
+.cw-sidebar-toggle:hover {
+  background: #0891b2 !important;
+  border-color: #0891b2 !important;
+  color: #fff !important;
+}
+
+/* Final request pass: glass public navbar + hamburger dashboard drawers. */
+.cw-navbar {
+  background: rgba(255,255,255,.72) !important;
+  border-bottom: 1px solid rgba(255,255,255,.38) !important;
+  box-shadow: 0 18px 45px rgba(15,23,42,.10) !important;
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+:root[data-theme="dark"] .cw-navbar {
+  background: rgba(15,23,42,.70) !important;
+  border-bottom-color: rgba(255,255,255,.10) !important;
+}
+
+.cw-navbar .cw-more-menu {
+  display: inline-flex !important;
+}
+.cw-navbar .cw-nav-cluster,
+.cw-navbar .cw-desktop-auth,
+.cw-navbar #mainNav > .d-flex.ms-lg-auto {
+  display: none !important;
+}
+@media (min-width: 768px) {
+  .cw-navbar .cw-more-menu {
+    display: inline-flex !important;
+  }
+}
+
+body.cw-admin-shell .cw-admin-profile {
+  display: none !important;
+}
+
+#cwRangeLabel {
+  display: none !important;
+}
+
+body.cw-admin-shell .cw-mobile-dashboard-toggle {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  body.cw-admin-shell {
+    background: #151515 !important;
+  }
+  body.cw-admin-shell > .container-fluid {
+    padding: 0 !important;
+  }
+  body.cw-admin-shell > .container-fluid > .row {
+    display: block;
+  }
+  body.cw-admin-shell .cw-mobile-dashboard-toggle {
+    display: inline-flex;
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 1060;
+    width: 36px;
+    min-height: 36px;
+    height: 36px;
+    border-radius: 10px;
+    padding: 0;
+    justify-content: center;
+    background: #222;
+    border-color: rgba(255,255,255,.12);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(0,0,0,.28);
+  }
+  body.cw-admin-shell .cw-mobile-dashboard-toggle span {
+    display: none;
+  }
+  body.cw-admin-shell .cw-sidebar,
+  body.cw-admin-shell.cw-sidebar-collapsed .cw-sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1055;
+    flex: 0 0 250px !important;
+    width: 250px !important;
+    max-width: 82vw !important;
+    height: 100vh;
+    min-height: 100vh !important;
+    overflow-y: auto;
+    border-radius: 0 18px 18px 0 !important;
+    padding-top: 58px !important;
+    background: #202020 !important;
+    box-shadow: 18px 0 45px rgba(0,0,0,.35);
+  }
+  body.cw-admin-shell.cw-mobile-dashboard-open .cw-sidebar {
+    display: block;
+  }
+  body.cw-admin-shell .cw-sidebar nav,
+  body.cw-admin-shell.cw-mobile-dashboard-open .cw-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+  body.cw-admin-shell .cw-sidebar .nav-link {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  body.cw-admin-shell .cw-sidebar-toggle {
+    display: none !important;
+  }
+  body.cw-admin-shell main {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 58px 10px 24px !important;
+  }
+  body.cw-admin-shell .cw-admin-topbar {
+    background: #151515;
+    border-bottom-color: rgba(255,255,255,.08);
+    margin-bottom: 12px;
+  }
+}
+
+.cw-review-table,
+.cw-review-table table,
+.table {
+  table-layout: auto;
+}
+.cw-review-table th,
+.cw-review-table td,
+.table th,
+.table td {
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  vertical-align: top;
+}
+.cw-review-text,
+.cw-review-item,
+.cw-product-ratings,
+.cw-card p,
+.cw-card li {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+@media (max-width: 575px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .cw-review-table,
+  .table {
+    min-width: 640px;
+  }
+  .cw-card {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+
+/* Latest scope: three-dots menu only on mobile; desktop shows full navbar controls. */
+@media (min-width: 768px) {
+  .cw-navbar .cw-more-menu {
+    display: none !important;
+  }
+  .cw-navbar .cw-nav-cluster {
+    display: flex !important;
+  }
+  .cw-navbar #mainNav > .d-flex.ms-lg-auto,
+  .cw-navbar #mainNav .cw-signin-btn,
+  .cw-navbar .cw-lang-switch,
+  .cw-navbar [data-theme-toggle] {
+    display: inline-flex !important;
+  }
+  .cw-navbar .navbar-collapse {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .cw-navbar .cw-more-menu {
+    display: inline-flex !important;
+  }
+  .cw-navbar .cw-nav-cluster,
+  .cw-navbar #mainNav > .d-flex.ms-lg-auto,
+  .cw-navbar #mainNav .cw-signin-btn {
+    display: none !important;
+  }
 }
