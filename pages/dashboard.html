@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Citywide Jigjiga</title>
+  <meta name="description" content="Your Citywide Jigjiga dashboard." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+</head>
+<body data-cw-guard="user">
+
+  <nav class="navbar navbar-expand-lg cw-navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand cw-brand" href="home.html"><img src="../assets/logos/logo-header.svg" alt="Citywide Jigjiga" class="cw-logo-header" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0"><li class="nav-item"><a class="nav-link" href="home.html">Home</a></li><li class="nav-item"><a class="nav-link" href="listings.html">Browse</a></li><li class="nav-item"><a class="nav-link" href="add-item.html">List Item</a></li><li class="nav-item"><a class="nav-link" href="about.html">About</a></li><li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li></ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <aside class="col-lg-3 col-xl-2 cw-sidebar" data-cw-sidebar data-active="overview"></aside>
+      <main class="col-lg-9 col-xl-10 py-4 px-4">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+          <div>
+            <h2 class="mb-1">Welcome back, <span data-user-name>User</span> 👋</h2>
+            <p class="text-muted mb-0">One account — switch between lending and renting any time.</p>
+          </div>
+          <a href="add-item.html" class="btn btn-brand"><i class="bi bi-plus-lg me-1"></i> New listing</a>
+        </div>
+
+        <ul class="nav nav-pills cw-dash-tabs mb-4" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-lend" data-bs-toggle="pill" data-bs-target="#pane-lend" type="button" role="tab"><i class="bi bi-box-seam me-2"></i>I'm Lending</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-rent" data-bs-toggle="pill" data-bs-target="#pane-rent" type="button" role="tab"><i class="bi bi-bag-check me-2"></i>I'm Renting</button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+
+          <!-- ===== LENDING TAB ===== -->
+          <div class="tab-pane fade show active" id="pane-lend" role="tabpanel">
+            <div class="row g-3 mb-4">
+              <div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><div class="d-flex justify-content-between mb-2"><span class="text-muted small">My listings</span><span class="cw-stat-icon bg-brand-soft text-brand"><i class="bi bi-collection"></i></span></div><h3 class="mb-0">7</h3><p class="small text-success mb-0"><i class="bi bi-arrow-up"></i> 2 this month</p></div></div>
+              <div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><div class="d-flex justify-content-between mb-2"><span class="text-muted small">Incoming requests</span><span class="cw-stat-icon bg-brand-soft text-brand"><i class="bi bi-inbox"></i></span></div><h3 class="mb-0">3</h3><p class="small text-muted mb-0">Awaiting your reply</p></div></div>
+              <div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><div class="d-flex justify-content-between mb-2"><span class="text-muted small">Total earnings</span><span class="cw-stat-icon bg-brand-soft text-brand"><i class="bi bi-cash-coin"></i></span></div><h3 class="mb-0">42,800 ETB</h3><p class="small text-success mb-0"><i class="bi bi-arrow-up"></i> 18% vs last month</p></div></div>
+              <div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><div class="d-flex justify-content-between mb-2"><span class="text-muted small">Messages from renters</span><span class="cw-stat-icon bg-brand-soft text-brand"><i class="bi bi-chat-dots"></i></span></div><h3 class="mb-0">5</h3><p class="small text-muted mb-0">2 unread</p></div></div>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-lg-7">
+                <div class="cw-card p-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">Incoming booking requests</h5><a href="bookings.html" class="small text-brand">View all</a></div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-calendar-plus text-brand me-2"></i>Ayan Hassan · Honda Generator</span><span><a href="#" class="btn btn-sm btn-brand">Accept</a> <a href="#" class="btn btn-sm btn-outline-secondary">Decline</a></span></li>
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-calendar-plus text-brand me-2"></i>Mohamed Ali · DJI Drone</span><span><a href="#" class="btn btn-sm btn-brand">Accept</a> <a href="#" class="btn btn-sm btn-outline-secondary">Decline</a></span></li>
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-calendar-plus text-brand me-2"></i>Hodan Ibrahim · Projector</span><span><a href="#" class="btn btn-sm btn-brand">Accept</a> <a href="#" class="btn btn-sm btn-outline-secondary">Decline</a></span></li>
+                  </ul>
+                </div>
+                <div class="cw-card p-4 mt-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">My listings</h5><a href="my-listings.html" class="small text-brand">Manage</a></div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-lightning-charge text-brand me-2"></i>Honda EU22i Generator</span><span class="badge bg-success">Active</span></li>
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-camera text-brand me-2"></i>DJI Mavic 3 Drone</span><span class="badge bg-success">Active</span></li>
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-speaker text-brand me-2"></i>Wedding Sound System</span><span class="badge bg-secondary">Paused</span></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <div class="cw-card p-4 h-100">
+                  <h5 class="mb-3">Earnings overview</h5>
+                  <div class="mb-3"><div class="d-flex justify-content-between small mb-1"><span>This month</span><span class="fw-semibold">14,200 ETB</span></div><div class="progress" style="height:6px;"><div class="progress-bar bg-brand" style="width:72%;"></div></div></div>
+                  <div class="mb-3"><div class="d-flex justify-content-between small mb-1"><span>Pending payout</span><span class="fw-semibold">3,200 ETB</span></div><div class="progress" style="height:6px;"><div class="progress-bar bg-warning" style="width:25%;"></div></div></div>
+                  <hr/>
+                  <h6 class="mb-2">Rental history (lender)</h6>
+                  <ul class="list-unstyled small text-muted mb-0">
+                    <li class="mb-1"><i class="bi bi-check2-circle text-success me-1"></i>Honda Generator · Ayan H. · 3 days</li>
+                    <li class="mb-1"><i class="bi bi-check2-circle text-success me-1"></i>Projector · Layla O. · 1 day</li>
+                    <li><i class="bi bi-check2-circle text-success me-1"></i>Sound System · Hodan I. · 2 days</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== RENTING TAB ===== -->
+          <div class="tab-pane fade" id="pane-rent" role="tabpanel">
+            <div class="row g-3 mb-4">
+              <div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><div class="d-flex justify-content-between mb-2"><span class="text-muted small">Active rentals</span><span class="cw-stat-icon bg-brand-soft text-brand"><i class="bi bi-bag-check"></i></span></div><h3 class="mb-0">2</h3><p class="small text-muted mb-0">Next return: Fri</p></div></div>
+              <div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><div class="d-flex justify-content-between mb-2"><span class="text-muted small">Wishlist</span><span class="cw-stat-icon bg-brand-soft text-brand"><i class="bi bi-heart"></i></span></div><h3 class="mb-0">6</h3><p class="small text-muted mb-0">Saved items</p></div></div>
+              <div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><div class="d-flex justify-content-between mb-2"><span class="text-muted small">Spent this month</span><span class="cw-stat-icon bg-brand-soft text-brand"><i class="bi bi-credit-card"></i></span></div><h3 class="mb-0">4,500 ETB</h3><p class="small text-muted mb-0">3 payments</p></div></div>
+              <div class="col-sm-6 col-xl-3"><div class="cw-card p-3"><div class="d-flex justify-content-between mb-2"><span class="text-muted small">Messages with owners</span><span class="cw-stat-icon bg-brand-soft text-brand"><i class="bi bi-chat-left-text"></i></span></div><h3 class="mb-0">4</h3><p class="small text-muted mb-0">1 unread</p></div></div>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-lg-7">
+                <div class="cw-card p-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">My active rentals</h5><a href="my-bookings.html" class="small text-brand">View all</a></div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-tools text-brand me-2"></i>Cordless Drill · from Said F.</span><span class="text-muted small">Return Fri · <a href="#" class="text-brand">Track</a></span></li>
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-camera-video text-brand me-2"></i>Projector · from Layla O.</span><span class="text-muted small">Return Sun · <a href="#" class="text-brand">Track</a></span></li>
+                  </ul>
+                </div>
+                <div class="cw-card p-4 mt-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">Rental history</h5><a href="rental-history.html" class="small text-brand">View all</a></div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between"><span>Wedding Tent · Yusuf A.</span><span class="text-muted small">Apr 18 · 1,200 ETB</span></li>
+                    <li class="list-group-item d-flex justify-content-between"><span>Camping Set · Nimo K.</span><span class="text-muted small">Apr 02 · 800 ETB</span></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <div class="cw-card p-4 h-100">
+                  <h5 class="mb-3">Wishlist</h5>
+                  <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-heart-fill text-brand me-2"></i>Sony A7 IV Camera</span><a href="#" class="small text-brand">View</a></li>
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-heart-fill text-brand me-2"></i>Bose PA Speaker</span><a href="#" class="small text-brand">View</a></li>
+                    <li class="list-group-item d-flex justify-content-between"><span><i class="bi bi-heart-fill text-brand me-2"></i>Folding Tables ×10</span><a href="#" class="small text-brand">View</a></li>
+                  </ul>
+                  <a href="wishlist.html" class="btn btn-outline-brand btn-sm w-100">Open wishlist</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <footer class="cw-footer mt-5">
+    <div class="container">
+      <p class="small text-center mb-0">© 2026 Citywide Jigjiga. Built in Jigjiga, for Jigjiga.</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/config.js"></script>
+<script src="../js/chatbot.js" defer></script>
+<script src="../js/sidebar.js" defer></script>
+<script src="../js/reviews.js" defer></script>
+  <script src="../js/rental-requests.js" defer></script>
+<script src="../js/dashboard.js" defer></script>
+</body>
+</html>

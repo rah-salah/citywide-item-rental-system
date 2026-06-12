@@ -1,8 +1,0 @@
-[
-  { "id": 101, "ownerId": 1, "title": "Honda EU22i Generator", "category": "Power & Tools", "dailyPrice": 850, "deposit": 1700, "location": "Kebele 02", "status": "active", "image": "images/electronics.jpg" },
-  { "id": 102, "ownerId": 1, "title": "DJI Mavic 3 Drone", "category": "Electronics", "dailyPrice": 1200, "deposit": 5000, "location": "Jigjiga Central Area", "status": "active", "image": "images/electronics.jpg" },
-  { "id": 103, "ownerId": 1, "title": "Wedding Sound System", "category": "Events", "dailyPrice": 1500, "deposit": 3000, "location": "Awale Area", "status": "paused", "image": "images/electronics.jpg" },
-  { "id": 104, "ownerId": 3, "title": "Toyota Hilux Pickup", "category": "Vehicles", "dailyPrice": 4500, "deposit": 10000, "location": "Sheik Ali Jowhar", "status": "active", "image": "images/electronics.jpg" },
-  { "id": 105, "ownerId": 3, "title": "Canon DSLR Camera Kit", "category": "Electronics", "dailyPrice": 900, "deposit": 4000, "location": "Kebele 05", "status": "pending", "image": "images/electronics.jpg" },
-  { "id": 106, "ownerId": 1, "title": "Construction Scaffolding", "category": "Construction", "dailyPrice": 600, "deposit": 1500, "location": "Dhagaxle Area", "status": "pending", "image": "images/electronics.jpg" }
-]
