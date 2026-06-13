@@ -7,14 +7,15 @@
     "You are CityWide AI Assistant.",
     "CityWide is a rental marketplace platform where users can rent and list items.",
     "Help users find items, explain renting, listing, Chapa payments, bookings, categories, featured advertisements, and platform support.",
-    "Be concise, friendly and helpful. If asked something outside CityWide, gently redirect to platform topics."
+    "Answer the user's exact question in English. Be concise, friendly and helpful.",
+    "If the question is outside CityWide, still answer briefly, then connect it back to renting or using the platform when useful."
   ].join("\n");
   var SYSTEM_PROMPT_SO = [
     "Waxaad tahay Kaaliyaha AI ee CityWide.",
     "CityWide waa suuq kireysi ah oo dadka u oggolaanaya inay alaab kireystaan ama liis geliyaan.",
-    "Ka jawaab Af-Soomaali cad, kooban, saaxiibtinimo leh.",
+    "Ka jawaab su'aasha isticmaalaha si toos ah adigoo isticmaalaya Af-Soomaali cad, kooban, saaxiibtinimo leh.",
     "Ka caawi isticmaalayaasha kireynta, liis gelinta, lacag bixinta Chapa, dalabyada, qaybaha, xayeysiisyada muuqda, iyo taageerada guud.",
-    "Haddii su'aashu ka baxsan tahay CityWide, si edeb leh ugu celi mowduucyada platform-ka."
+    "Haddii su'aashu ka baxsan tahay CityWide, si kooban uga jawaab kadibna marka ay habboon tahay ku xir isticmaalka platform-ka."
   ].join("\n");
 
   var SUGGESTIONS = {
@@ -146,9 +147,12 @@
     });
 
     function askGemini() {
-      var key = window.CITYWIDE_GEMINI_KEY;
+      var key = String(window.CITYWIDE_GEMINI_KEY || "").trim();
+      var latestQuestion = history[history.length - 1] && history[history.length - 1].content;
       if (!key || key === "REPLACE_WITH_YOUR_GEMINI_API_KEY") {
-        addMsg("bot", localReply(history[history.length - 1] && history[history.length - 1].content));
+        console.error("[CityWide chatbot] Missing Gemini API key. Set window.CITYWIDE_GEMINI_KEY in js/config.js.");
+        addMsg("bot", copy().noKey, "error");
+        addMsg("bot", localReply(latestQuestion));
         sugWrap.style.display = "";
         return;
       }
@@ -163,23 +167,48 @@
         generationConfig: { temperature: 0.7, maxOutputTokens: 600 }
       };
       var model = window.CITYWIDE_GEMINI_MODEL || "gemini-2.0-flash";
-      fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + encodeURIComponent(key), {
+      var endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + encodeURIComponent(key);
+      console.groupCollapsed("[CityWide chatbot] Gemini request");
+      console.log("Endpoint:", "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent");
+      console.log("Model:", model);
+      console.log("Language:", lang());
+      console.log("Payload:", payload);
+      console.groupEnd();
+      fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       })
-      .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
+      .then(function(r){
+        return r.text().then(function(text){
+          var json = null;
+          try { json = text ? JSON.parse(text) : null; }
+          catch(e) { console.error("[CityWide chatbot] Gemini returned non-JSON response:", text); }
+          return { ok: r.ok, status: r.status, statusText: r.statusText, j: json, raw: text };
+        });
+      })
       .then(function(res){
         typing.remove();
         sendBtn.disabled = false;
         if (!res.ok) {
-          addMsg("bot", localReply(history[history.length - 1] && history[history.length - 1].content));
+          var apiMessage = (res.j && res.j.error && res.j.error.message) || res.raw || (res.status + " " + res.statusText);
+          console.error("[CityWide chatbot] Gemini API error", res);
+          addMsg("bot", "Gemini API error: " + apiMessage, "error");
           sugWrap.style.display = "";
           return;
         }
         var reply = "";
         try { reply = res.j.candidates[0].content.parts.map(function(p){ return p.text || ""; }).join(""); }
-        catch (e) { reply = copy().generic; }
+        catch (e) {
+          console.error("[CityWide chatbot] Could not parse Gemini response", res.j, e);
+          reply = "";
+        }
+        if (!reply.trim()) {
+          addMsg("bot", "Gemini returned an empty response. Check console for the raw API payload.", "error");
+          sugWrap.style.display = "";
+          return;
+        }
+        console.log("[CityWide chatbot] Gemini response:", res.j);
         history.push({ role: "model", content: reply });
         addMsg("bot", reply);
         sugWrap.style.display = "";
@@ -187,7 +216,8 @@
       .catch(function(err){
         typing.remove();
         sendBtn.disabled = false;
-        addMsg("bot", localReply(history[history.length - 1] && history[history.length - 1].content));
+        console.error("[CityWide chatbot] Gemini fetch failed", err);
+        addMsg("bot", copy().network + err.message, "error");
         sugWrap.style.display = "";
       });
     }

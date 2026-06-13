@@ -897,3 +897,35 @@ body.cw-admin-shell .cw-admin-profile {
     display: none !important;
   }
 }
+
+@media (max-width: 576px) {
+  .cw-chat-fab {
+    width: 52px !important;
+    height: 52px !important;
+    right: 14px !important;
+    bottom: 84px !important;
+    font-size: 22px !important;
+  }
+  .cw-chat-panel {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 148px !important;
+    width: auto !important;
+    height: min(68vh, 520px) !important;
+    max-height: calc(100vh - 170px) !important;
+    border-radius: 16px !important;
+  }
+  .cw-chat-header {
+    padding: 10px 12px !important;
+  }
+  .cw-chat-body {
+    padding: 12px !important;
+  }
+  .cw-chat-suggestions {
+    max-height: 96px;
+    overflow-y: auto;
+  }
+  .cw-chat-input {
+    padding: 10px !important;
+  }
+}

@@ -319,13 +319,22 @@
 
     var elPopular = document.getElementById("chartPopularRented");
     if (elPopular) {
-      var names = ["Canon EOS R5", "Honda Generator", "Wedding Tent", "JBL Speakers", "Bosch Drill", "Projector"];
-      var base = filtered(STATE.bookings).length || 24;
-      var counts = names.map(function(_, i){ return Math.max(4, Math.round(base / (i + 2)) + (6 - i)); });
+      var listingById = {};
+      STATE.listings.forEach(function(l){ listingById[String(l.id)] = l; });
+      var popularMap = {};
+      filtered(STATE.bookings).forEach(function(booking){
+        var listing = listingById[String(booking.listingId)] || {};
+        var name = listing.title || ("Listing #" + (booking.listingId || booking.id));
+        popularMap[name] = (popularMap[name] || 0) + 1;
+      });
+      var popularRows = Object.keys(popularMap).map(function(name){ return { name:name, count:popularMap[name] }; })
+        .sort(function(a,b){ return b.count - a.count; })
+        .slice(0, 6);
+      if (!popularRows.length) popularRows = [{name:"No rentals in range", count:0}];
       charts.popular = new Chart(elPopular, {
         type:"bar",
-        data:{ labels:names, datasets:[
-          { label:"Completed rentals", data:counts, backgroundColor:"rgba(8,145,178,.86)", borderRadius:8, borderSkipped:false }
+        data:{ labels:popularRows.map(function(r){ return r.name; }), datasets:[
+          { label:"Completed rentals", data:popularRows.map(function(r){ return r.count; }), backgroundColor:"rgba(8,145,178,.86)", borderRadius:8, borderSkipped:false }
         ]},
         options: commonOpts({ indexAxis:"y", scales:{ x:{ beginAtZero:true }, y:{ grid:{display:false}, ticks:{ font:{ size:10 } } } } })
       });
@@ -333,13 +342,21 @@
 
     var elDemand = document.getElementById("chartCategoryDemand");
     if (elDemand) {
-      var cats = ["Cameras", "Power", "Events", "Tools", "Electronics"];
-      var totalListings = filtered(STATE.listings).length || 40;
-      var demand = cats.map(function(_, i){ return Math.max(8, Math.round(totalListings / (i + 1))); });
+      var listingIndex = {};
+      STATE.listings.forEach(function(l){ listingIndex[String(l.id)] = l; });
+      var demandMap = {};
+      filtered(STATE.bookings).forEach(function(booking){
+        var listing = listingIndex[String(booking.listingId)] || {};
+        var cat = listing.category || "Other";
+        demandMap[cat] = (demandMap[cat] || 0) + 1;
+      });
+      var demandRows = Object.keys(demandMap).map(function(cat){ return { cat:cat, count:demandMap[cat] }; })
+        .sort(function(a,b){ return b.count - a.count; });
+      if (!demandRows.length) demandRows = [{cat:"No rentals in range", count:1}];
       charts.demand = new Chart(elDemand, {
         type:"doughnut",
-        data:{ labels:cats, datasets:[{
-          data:demand,
+        data:{ labels:demandRows.map(function(r){ return r.cat; }), datasets:[{
+          data:demandRows.map(function(r){ return r.count; }),
           backgroundColor:["#0891b2","#0e7490","#38bdf8","#64748b","#94a3b8"],
           borderWidth:0
         }]},
