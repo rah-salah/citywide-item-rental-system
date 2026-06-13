@@ -1835,3 +1835,55 @@ body.cw-admin-shell .cw-mobile-dashboard-toggle {
     display: none !important;
   }
 }
+
+/* Mobile hero media fix only: preserve the existing hero UI/search layout. */
+@media (max-width: 576px) {
+  .cw-hero-modern .cw-hero-bg-video,
+  .cw-hero-slide video.cw-hero-bg-video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .cw-chat-fab {
+    width: 52px !important;
+    height: 52px !important;
+    right: 14px !important;
+    bottom: 84px !important;
+    font-size: 22px !important;
+  }
+  .cw-chat-panel {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 148px !important;
+    width: auto !important;
+    height: min(68vh, 520px) !important;
+    max-height: calc(100vh - 170px) !important;
+    border-radius: 16px !important;
+  }
+  .cw-chat-header {
+    padding: 10px 12px !important;
+  }
+  .cw-chat-body {
+    padding: 12px !important;
+  }
+  .cw-chat-suggestions {
+    max-height: 96px;
+    overflow-y: auto;
+  }
+  .cw-chat-suggestions button {
+    font-size: .78rem;
+    line-height: 1.2;
+  }
+  .cw-chat-input {
+    padding: 10px !important;
+  }
+  .cw-chat-input textarea {
+    min-height: 42px !important;
+    max-height: 90px !important;
+  }
+}

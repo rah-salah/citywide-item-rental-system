@@ -675,6 +675,10 @@
    ==================================================================== */
 (function(){
   var SKEY = "cw_user";
+  var BUILTIN_ADMIN_USERS = [
+    { id: 4, name: "Anna Lopez", email: "anna@email.com", password: "admin123", role: ["admin"], avatar: null, status: "active" },
+    { id: 5, name: "Super Admin", email: "superadmin@email.com", password: "super123", role: ["super_admin"], avatar: null, status: "active" }
+  ];
   // sget: returns the active user. Tries sessionStorage first; if missing
   // but a "remembered" user exists in localStorage, restores it so Remember Me
   // survives browser restarts.
@@ -725,8 +729,32 @@
     return window.cwPath("data/" + rel);
   }
 
+  function normalizeEmail(email){
+    return String(email || "").trim().toLowerCase();
+  }
+  function safeLocalUsers(){
+    try {
+      var rows = JSON.parse(localStorage.getItem("cw_users_extra") || "[]");
+      return Array.isArray(rows) ? rows : [];
+    } catch(e) {
+      console.warn("[CityWide auth] Could not parse cw_users_extra", e);
+      return [];
+    }
+  }
+  function mergeBuiltInAdmins(list){
+    var rows = Array.isArray(list) ? list.slice() : [];
+    BUILTIN_ADMIN_USERS.forEach(function(admin){
+      var exists = rows.some(function(u){ return normalizeEmail(u.email) === normalizeEmail(admin.email); });
+      if (!exists) rows.push(admin);
+    });
+    return rows;
+  }
   function fetchJSON(name){
-    return fetch(dataPath(name) + "?v=" + Date.now()).then(function(r){ return r.json(); });
+    var url = dataPath(name) + "?v=" + Date.now();
+    return fetch(url, { cache: "no-store" }).then(function(r){
+      if (!r.ok) throw new Error("Failed to fetch " + url + " (" + r.status + " " + r.statusText + ")");
+      return r.json();
+    });
   }
   window.cwData = fetchJSON;
 
@@ -741,18 +769,25 @@
     }
     f.addEventListener("submit", function(e){
       e.preventDefault();
-      var email = (f.querySelector('input[type="email"]')||{}).value || "";
+      var email = normalizeEmail((f.querySelector('input[type="email"]')||{}).value || "");
       var pass  = (f.querySelector('input[type="password"]')||{}).value || "";
       var remember = !!(f.querySelector('#remember') && f.querySelector('#remember').checked);
-      fetchJSON("users.json").then(function(list){
-        var local = JSON.parse(localStorage.getItem("cw_users_extra")||"[]");
-        var all = list.concat(local);
-        var u = all.filter(function(x){ return x.email.toLowerCase()===email.toLowerCase() && x.password===pass; })[0];
+      function finishLogin(list){
+        var local = safeLocalUsers();
+        var all = mergeBuiltInAdmins(list).concat(local);
+        var u = all.filter(function(x){ return normalizeEmail(x.email)===email && String(x.password)===String(pass); })[0];
         if (!u) { alert("Invalid email or password."); return; }
         if (u.status === "suspended") { alert("This account has been suspended."); return; }
         sset({id:u.id, name:u.name, email:u.email, role:u.role, avatar:u.avatar||null, area:"Jigjiga Central"}, remember);
         location.replace(landingFor(u));
-      }).catch(function(){ alert("Could not load users."); });
+      }
+      var localFirst = safeLocalUsers();
+      var localMatch = localFirst.filter(function(x){ return normalizeEmail(x.email)===email && String(x.password)===String(pass); })[0];
+      if (localMatch) { finishLogin([]); return; }
+      fetchJSON("users.json").then(finishLogin).catch(function(err){
+        console.error("[CityWide auth] users.json fetch failed; using built-in admin fallback.", err);
+        finishLogin([]);
+      });
     });
 
     // Forgot password: looks up the email in users.json + local users and
